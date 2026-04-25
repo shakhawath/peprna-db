@@ -17,18 +17,110 @@
 
     <p>This database collects curated experiments on peptide-mediated RNA delivery from the literature.</p>
 
-    <h2>How to use the database</h2>
-    <p>Start on the browse page to search by experiment ID, paper title, DOI, PMID, peptide name, sequence, RNA target, or output text.</p>
-    <p>Use the RNA type, in vivo, and uptake confirmed filters to narrow the results.</p>
+    <p>
+        <a href="#experiment-records">Experiment records</a> |
+        <a href="#key-experiment-labels">Key experiment labels</a> |
+        <a href="#peptide-information">Peptide information</a> |
+        <a href="#missing-values">Missing values</a> |
+        <a href="#conservative-labeling-policy">Conservative labeling policy</a> |
+        <a href="#searching-and-filtering">Searching and filtering</a> |
+        <a href="#downloads">Downloads</a> |
+        <a href="#citation-and-reuse">Citation and reuse</a> |
+        <a href="#data-updates-and-corrections">Data updates and corrections</a>
+    </p>
 
-    <h2>Key fields</h2>
-    <p><strong>Experiment ID:</strong> unique identifier for one curated experimental record.</p>
-    <p><strong>Paper ID:</strong> unique identifier for one publication; many experiments can belong to one paper.</p>
-    <p><strong>Peptide ID:</strong> unique identifier for one peptide entry; many experiments can use the same peptide.</p>
-    <p><strong>In vivo / Uptake confirmed:</strong> stored as yes, no, or blank when not clearly reported.</p>
-    <p><strong>Noncanonical residues:</strong> shows named residue annotations such as ORN when present.</p>
+    <h2 id="experiment-records">Experiment records</h2>
+    <p>Each row in the experiment table corresponds to one peptide, peptide formulation, or peptide-model combination.</p>
+    <p>If a peptide was tested both in vitro and in vivo, the in vitro and in vivo experiments are recorded as separate rows. This separation avoids mixing mechanistic in vitro activity with in vivo delivery outcomes.</p>
+    <p>If a peptide only exists as part of a larger formulation, the peptide-system combination is treated as the experimental unit.</p>
 
-    <h2>Missing values</h2>
-    <p>Blank fields indicate information that was not reported, not curated yet, or could not be normalized confidently from the source paper.</p>
+    <h2 id="key-experiment-labels">Key experiment labels</h2>
+
+    <h3>Delivery success class</h3>
+    <p><strong>Column name:</strong> <code>delivery_success_class</code></p>
+    <p><strong>Values:</strong> 0 or 1</p>
+    <p>This is the primary binary label for in vivo delivery success.</p>
+    <p><strong>1</strong> means functional RNA delivery was demonstrated in vivo.</p>
+    <p><strong>0</strong> means no demonstrated in vivo functional RNA delivery.</p>
+    <p>A value of 1 is assigned only when the study reports functional RNA delivery in vivo, such as in vivo gene knockdown, splice correction, reporter expression, tumor growth suppression, phenotypic rescue, or survival benefit.</p>
+    <p>A value of 0 includes in vitro-only studies, uptake-only studies, screened systems that were not advanced to successful in vivo testing, and systems that were tested but failed.</p>
+    <p>Important: in vitro functional activity alone does not qualify as <code>delivery_success_class = 1</code>.</p>
+
+    <h3>Uptake confirmed</h3>
+    <p><strong>Column name:</strong> <code>uptake_confirmed</code></p>
+    <p><strong>Values:</strong> 1 or blank</p>
+    <p>This field describes whether cellular uptake or internalization was explicitly demonstrated.</p>
+    <p><strong>1</strong> means uptake or internalization was explicitly shown.</p>
+    <p><strong>Blank</strong> means uptake was not discussed, not tested, or not clearly demonstrated.</p>
+    <p>Evidence may include fluorescence microscopy, confocal microscopy, flow cytometry, or similar assays showing cellular internalization of the RNA, peptide, or peptide-RNA complex.</p>
+
+    <h3>In vitro functional effect</h3>
+    <p><strong>Column name:</strong> <code>in_vitro_functional_effect</code></p>
+    <p><strong>Values:</strong> 0, 1, or blank</p>
+    <p>This field indicates whether the RNA cargo produced a functional biological effect in vitro.</p>
+    <p><strong>1</strong> means functional RNA activity was demonstrated in vitro.</p>
+    <p><strong>0</strong> means uptake was shown, but no functional RNA effect was demonstrated, or the in vitro result was negative.</p>
+    <p><strong>Blank</strong> means no data were available, the field was not applicable, or the experiment was not tested in vitro.</p>
+    <p>Examples of functional in vitro effects include gene knockdown, reporter protein expression, splice correction, gene silencing, or other RNA-mediated biological activity.</p>
+
+    <h3>Endosomal escape evidence</h3>
+    <p><strong>Column name:</strong> <code>endosomal_escape_evidence</code></p>
+    <p><strong>Values:</strong> 0, 1, or blank</p>
+    <p>This field describes whether the publication provided explicit evidence of endosomal or lysosomal escape.</p>
+    <p><strong>1</strong> means explicit evidence of endosomal or lysosomal escape was reported.</p>
+    <p><strong>0</strong> means explicit evidence of endosomal entrapment or lack of escape was reported.</p>
+    <p><strong>Blank</strong> means no explicit evidence was reported, the mechanism was not discussed, or the evidence was ambiguous.</p>
+    <p>Only explicit evidence is considered sufficient for <code>endosomal_escape_evidence = 1</code>. Examples may include cytosolic delivery assays, colocalization studies demonstrating release from endosomes or lysosomes, chloroquine- or bafilomycin-assisted escape experiments, direct evidence of membrane disruption, or other experiments directly supporting endosomal escape.</p>
+    <p>Because this field requires explicit evidence, endosomal escape may remain blank even when <code>delivery_success_class = 1</code>. Successful in vivo functional delivery does not automatically imply that explicit endosomal escape evidence was reported.</p>
+
+    <h3>Label confidence</h3>
+    <p><strong>Column name:</strong> <code>label_confidence</code></p>
+    <p>This field describes the confidence level assigned to a curated label based on the clarity and strength of evidence in the source publication.</p>
+    <p><strong>High or very high</strong> means the article provides direct, explicit experimental evidence supporting the label.</p>
+    <p><strong>Medium</strong> means the evidence supports the label but requires interpretation, or some details are incomplete.</p>
+    <p><strong>Low</strong> means the label was assigned conservatively because the evidence was limited, indirect, or ambiguous.</p>
+
+    <h3>In vivo flag</h3>
+    <p><strong>Column name:</strong> <code>in_vivo_flag</code></p>
+    <p><strong>Values:</strong> 0 or 1</p>
+    <p>This field indicates whether an in vivo experiment was performed for the peptide-RNA system.</p>
+    <p><strong>1</strong> means the peptide-RNA system was tested in vivo.</p>
+    <p><strong>0</strong> means no in vivo experiment was reported.</p>
+    <p>The <code>in_vivo_flag</code> is separate from <code>delivery_success_class</code>. A system may have <code>in_vivo_flag = 1</code> but <code>delivery_success_class = 0</code> if in vivo testing was performed but functional RNA delivery was not demonstrated.</p>
+
+    <h2 id="peptide-information">Peptide information</h2>
+    <p>PepRNA-DB contains curated peptide information extracted from the source literature.</p>
+    <p>The peptide curation workflow included LLM-assisted extraction using ChatGPT 5.2 followed by manual checking. Raw peptide sequence information was cleaned to remove backbone annotations and formatting inconsistencies where possible. The cleaned sequences were then tokenized to support downstream computational analysis and to show the availability of noncanonical residues.</p>
+    <p>Noncanonical residues, residue names, peptide modifications, and modification descriptions were also collected where available. These annotations help preserve chemical and structural information that may not be represented in a simplified amino-acid sequence.</p>
+    <p>The peptide section may include peptide name or identifier, raw sequence as reported in the article, cleaned peptide sequence, tokenized sequence, noncanonical residues and residue names, peptide modifications, backbone modifications, terminal modifications, conjugations or chemical linkers, description of peptide role in the delivery system, and formulation or complexation information.</p>
+    <p>When available, peptide modifications are preserved in descriptive fields rather than being forced into the cleaned amino acid sequence. This allows the database to retain both computationally usable sequence representations and human-readable modification details.</p>
+
+    <h2 id="missing-values">Missing values</h2>
+    <p>Missing values are represented as blank cells.</p>
+    <p>A blank value does not necessarily mean that the property is absent. It usually means that the information was not reported, was unclear, was not tested, or could not be confidently extracted from the article.</p>
+    <p>For evidence labels, blank cells are used when the corresponding experiment or mechanism was not tested, not applicable, not clearly discussed, or not supported by explicit evidence.</p>
+
+    <h2 id="conservative-labeling-policy">Conservative labeling policy</h2>
+    <p>PepRNA-DB uses conservative evidence-based labeling.</p>
+    <p>Labels are assigned based on demonstrated experimental results, not on author intent, proposed mechanism, or expected peptide behavior. When the evidence is ambiguous, the more conservative label is used.</p>
+    <p>This is especially important for the distinction between uptake and functional delivery; in vitro activity and in vivo activity; proposed endosomal escape and explicitly demonstrated endosomal escape; and tested systems and successful systems.</p>
+    <p>The database is designed to support two-stage analysis: in vitro activity, represented by <code>in_vitro_functional_effect</code>, and in vivo translation, represented by <code>delivery_success_class</code>.</p>
+
+    <h2 id="searching-and-filtering">Searching and filtering</h2>
+    <p>The Browse page allows users to search and filter experiment records by peptide, RNA type, delivery class, year, publication, in vivo testing, uptake, functional effect, and endosomal escape evidence.</p>
+    <p>Example uses include searching a peptide name to find all associated experiments, filtering by RNA type to compare siRNA, mRNA, ASO, or other RNA cargos, filtering <code>in_vivo_flag = 1</code> to view systems tested in animals, filtering <code>delivery_success_class = 1</code> to identify systems with demonstrated in vivo functional delivery, and comparing <code>uptake_confirmed = 1</code> with <code>in_vitro_functional_effect = 1</code> to distinguish uptake from functional intracellular delivery.</p>
+
+    <h2 id="downloads">Downloads</h2>
+    <p>The Downloads page provides access to structured database tables for reuse and analysis.</p>
+    <p>Available files may include the full dataset, experiment table, peptide table, and publication table.</p>
+    <p>Downloaded files can be used for statistical analysis, visualization, sequence analysis, and formulation comparison. Users should check the column descriptions and missing-value definitions before analysis.</p>
+
+    <h2 id="citation-and-reuse">Citation and reuse</h2>
+    <p>PepRNA-DB is intended as a freely accessible research resource. Users should cite the database when using the data in publications, presentations, or derivative analyses.</p>
+    <p>When using individual records, users are encouraged to also cite the original source publications from which the experimental data were curated.</p>
+
+    <h2 id="data-updates-and-corrections">Data updates and corrections</h2>
+    <p>PepRNA-DB is a curated resource and may be updated as new literature becomes available or existing records are corrected.</p>
+    <p>Users who identify missing information, possible errors, or relevant publications are encouraged to contact the database maintainers. Corrections will be reviewed and incorporated into future versions where appropriate.</p>
 </body>
 </html>

@@ -15,14 +15,18 @@
         <a href="{% url 'contact' %}">Contact</a>
     </p>
 
-    <p>This resource is a curated database of peptide-mediated RNA delivery experiments collected from the published literature.</p>
-    <p>The current version focuses on linking each curated experiment to its paper, peptide, RNA context, formulation details, and reported outcome.</p>
+    <p>PepRNA-DB is a curated database of peptide-based RNA delivery systems extracted from the scientific literature. The database is designed to support mechanistic analysis and comparison of peptide-mediated RNA delivery strategies.</p>
+    <p>Each record represents a peptide, peptide formulation, or peptide-model combination extracted from an individual publication. When the same peptide-RNA system was tested under different experimental settings, such as in vitro and in vivo, separate experiment records are created.</p>
+    <p>The database focuses on experimentally reported evidence, including peptide sequence, RNA cargo type, delivery system, biological model, uptake, in vitro functional activity, endosomal escape evidence, and in vivo delivery outcome.</p>
 
     <h2>What is included</h2>
     <p>Each experiment record is linked to one paper and one peptide. Multiple experiments can come from the same paper, and multiple experiments can reuse the same peptide.</p>
 
-    <h2>Curation approach</h2>
-    <p>Data are curated from published articles into a structured spreadsheet and imported into the database. Numeric and boolean fields are normalized where possible, while ambiguous or unavailable values are left blank.</p>
+    <h2>Data curation workflow</h2>
+    <p>PepRNA-DB was generated using a combined LLM-assisted and manual curation workflow.</p>
+    <p>Relevant articles were collected manually and processed one paper at a time. For each publication, the article content was provided to ChatGPT 5.2, which generated an initial structured extraction of peptide-based RNA delivery experiments. The extracted records were then manually reviewed, corrected, and standardized before inclusion in the database.</p>
+    <p>The curation workflow included manual selection and attachment of relevant articles; initial structured extraction using ChatGPT 5.2; manual checking and correction of extracted peptide, RNA, formulation, model, and outcome information; cleaning and standardization of peptide sequences; tokenization of peptide sequences for computational analysis; collection of noncanonical residues and residue names; collection of peptide modification descriptions and related formulation details; and assignment of evidence-based labels using conservative rules.</p>
+    <p>The labels in PepRNA-DB describe demonstrated experimental evidence. They should not be interpreted as predictions, assumptions, or general claims about a peptide's potential.</p>
 
     <h2>Access</h2>
     <p>This database is intended to be freely accessible for browsing and literature-based exploration.</p>
