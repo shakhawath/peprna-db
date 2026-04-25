@@ -1,0 +1,15 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.pyc
+db.sqlite3
+staticfiles/
+save_images/
+*.zip
+*.pptx
+~$*
+Rnadb Schema And Django Starter.docx
+Rnadb Schema And Django Starter.pdf
+gkaf973.pdf
+apr_25_save_main.xlsx

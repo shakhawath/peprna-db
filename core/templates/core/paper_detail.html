@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ paper.title }}</title>
+</head>
+<body>
+    <p><a href="{% url 'browse' %}">Back to browse</a></p>
+    <h1>{{ paper.title }}</h1>
+
+    <dl>
+        <dt>Paper ID</dt>
+        <dd>{{ paper.paper_id }}</dd>
+        <dt>Year</dt>
+        <dd>{{ paper.year }}</dd>
+        <dt>DOI</dt>
+        <dd>{{ paper.doi|default:"" }}</dd>
+        <dt>PMID</dt>
+        <dd>{{ paper.pmid|default:"" }}</dd>
+        <dt>Journal</dt>
+        <dd>{{ paper.journal|default:"" }}</dd>
+        <dt>Source URL</dt>
+        <dd>
+            {% if paper.source_url %}
+                <a href="{{ paper.source_url }}">{{ paper.source_url }}</a>
+            {% endif %}
+        </dd>
+    </dl>
+
+    <h2>Experiments</h2>
+    {% if experiments %}
+        <ul>
+            {% for experiment in experiments %}
+                <li>
+                    <a href="{% url 'experiment_detail' experiment.id %}">
+                        {{ experiment.experiment_id }}
+                    </a>
+                    with
+                    <a href="{% url 'peptide_detail' experiment.peptide.id %}">
+                        {{ experiment.peptide }}
+                    </a>
+                    {% if experiment.rna_type %}({{ experiment.rna_type }}){% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No experiments linked to this paper.</p>
+    {% endif %}
+</body>
+</html>

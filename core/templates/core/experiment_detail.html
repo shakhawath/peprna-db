@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ experiment.experiment_id }}</title>
+</head>
+<body>
+    <p><a href="{% url 'browse' %}">Back to browse</a></p>
+    <h1>{{ experiment.experiment_id }}</h1>
+
+    <h2>Paper</h2>
+    <p>
+        <a href="{% url 'paper_detail' experiment.paper.id %}">{{ experiment.paper.title }}</a>
+        ({{ experiment.paper.year }})
+    </p>
+
+    <h2>Peptide</h2>
+    <p><a href="{% url 'peptide_detail' experiment.peptide.id %}">{{ experiment.peptide }}</a></p>
+    <p><strong>Sequence:</strong> {{ experiment.peptide.peptide_sequence_raw }}</p>
+
+    <h2>All experiment fields</h2>
+    <table border="1" cellpadding="6" cellspacing="0">
+        <tbody>
+            {% for field in experiment_fields %}
+                <tr>
+                    <th align="left">{{ field.name }}</th>
+                    <td>{{ field.value|default:"" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

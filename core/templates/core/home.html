@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Peptide-mediated RNA delivery database</title>
+</head>
+<body>
+    <h1>PepRNA-DB: Peptide-mediated RNA delivery database</h1>
+    <p>A curated resource of literature-linked peptide-mediated RNA delivery experiments.</p>
+
+    <p>
+        <a href="{% url 'about' %}">About</a> |
+        <a href="{% url 'contact' %}">Contact</a> |
+        <a href="{% url 'browse' %}">Browse experiments</a> |
+        <a href="{% url 'downloads' %}">Downloads</a> |
+        <a href="{% url 'help' %}">Help</a> |
+        <a href="{% url 'faq' %}">FAQ</a> |
+        <a href="/admin/">Admin</a>
+    </p>
+
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <td style="padding-right: 8px; text-align: center; vertical-align: top; width: 36%; height: 405px;">
+                <img
+                    src="{% static 'core/images/peptides.png' %}"
+                    alt="Peptide illustration"
+                    width="520"
+                >
+            </td>
+            <td style="padding-right: 8px; text-align: center; vertical-align: top; width: 28%; height: 405px;">
+                <img
+                    src="{% static 'core/images/rna.png' %}"
+                    alt="RNA illustration"
+                    width="340"
+                >
+            </td>
+            <td style="text-align: center; vertical-align: top; width: 36%; height: 405px;">
+                <img
+                    src="{% static 'core/images/peptide_rna_complex.png' %}"
+                    alt="Peptide-RNA complex illustration"
+                    width="420"
+                >
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: center; vertical-align: top;">
+                <p style="font-size: 24px; text-align: center; margin: -88px 0 0 0;">Peptide</p>
+            </td>
+            <td style="text-align: center; vertical-align: top;">
+                <p style="font-size: 24px; text-align: center; margin: -88px 0 0 0;">RNA</p>
+            </td>
+            <td style="text-align: center; vertical-align: top;">
+                <p style="font-size: 24px; text-align: center; margin: -88px 0 0 0;">Peptide-RNA complex</p>
+            </td>
+        </tr>
+    </table>
+
+    <h2>Current statistics</h2>
+    <ul>
+        <li>Curated experiments: {{ stats.experiment_count }}</li>
+        <li>Peptide systems: {{ stats.peptide_count }}</li>
+        <li>Literature papers: {{ stats.paper_count }}</li>
+        <li>In vivo experiments: {{ stats.in_vivo_count }}</li>
+        <li>Distinct RNA types: {{ stats.rna_type_count }}</li>
+    </ul>
+
+    <h2>Start here</h2>
+    <p>Use the <a href="{% url 'browse' %}">Browse experiments</a> page to search by experiment ID, paper title, DOI, PMID, peptide name, peptide sequence, or RNA target.</p>
+</body>
+</html>

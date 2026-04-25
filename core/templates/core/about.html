@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>About</title>
+</head>
+<body>
+    <h1>About</h1>
+    <p>
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'browse' %}">Browse</a> |
+        <a href="{% url 'downloads' %}">Downloads</a> |
+        <a href="{% url 'faq' %}">FAQ</a> |
+        <a href="{% url 'help' %}">Help</a> |
+        <a href="{% url 'contact' %}">Contact</a>
+    </p>
+
+    <p>This resource is a curated database of peptide-mediated RNA delivery experiments collected from the published literature.</p>
+    <p>The current version focuses on linking each curated experiment to its paper, peptide, RNA context, formulation details, and reported outcome.</p>
+
+    <h2>What is included</h2>
+    <p>Each experiment record is linked to one paper and one peptide. Multiple experiments can come from the same paper, and multiple experiments can reuse the same peptide.</p>
+
+    <h2>Curation approach</h2>
+    <p>Data are curated from published articles into a structured spreadsheet and imported into the database. Numeric and boolean fields are normalized where possible, while ambiguous or unavailable values are left blank.</p>
+
+    <h2>Access</h2>
+    <p>This database is intended to be freely accessible for browsing and literature-based exploration.</p>
+</body>
+</html>

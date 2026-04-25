@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Browse experiments</title>
+</head>
+<body>
+    <h1>Browse experiments</h1>
+    <p>
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'downloads' %}">Downloads</a> |
+        <a href="{% url 'faq' %}">FAQ</a> |
+        <a href="{% url 'help' %}">Help</a> |
+        <a href="{% url 'about' %}">About</a> |
+        <a href="{% url 'contact' %}">Contact</a>
+    </p>
+
+    <form method="get">
+        <p>
+            <label for="q">Search</label>
+            <input id="q" type="text" name="q" value="{{ q }}" size="40">
+        </p>
+        <p>
+            <label for="rna_type">RNA type</label>
+            <input id="rna_type" type="text" name="rna_type" value="{{ rna_type }}">
+        </p>
+        <p>
+            <label for="in_vivo_flag">In vivo</label>
+            <select id="in_vivo_flag" name="in_vivo_flag">
+                <option value="" {% if not in_vivo_flag %}selected{% endif %}>Any</option>
+                <option value="yes" {% if in_vivo_flag == "yes" %}selected{% endif %}>Yes</option>
+                <option value="no" {% if in_vivo_flag == "no" %}selected{% endif %}>No</option>
+            </select>
+        </p>
+        <p>
+            <label for="uptake_confirmed">Uptake confirmed</label>
+            <select id="uptake_confirmed" name="uptake_confirmed">
+                <option value="" {% if not uptake_confirmed %}selected{% endif %}>Any</option>
+                <option value="yes" {% if uptake_confirmed == "yes" %}selected{% endif %}>Yes</option>
+                <option value="no" {% if uptake_confirmed == "no" %}selected{% endif %}>No</option>
+            </select>
+        </p>
+        <p>
+            <button type="submit">Apply filters</button>
+            <a href="{% url 'browse' %}">Clear</a>
+        </p>
+    </form>
+
+    {% if experiment_rows %}
+        <p>
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            ({{ page_obj.paginator.count }} experiments total)
+        </p>
+        <table border="1" cellpadding="6" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Experiment</th>
+                    <th>Paper</th>
+                    <th>Year</th>
+                    <th>Peptide</th>
+                    <th>RNA type</th>
+                    <th>Delivery class</th>
+                    <th>In vivo</th>
+                    <th>Uptake confirmed</th>
+                    <th>In vitro functional effect</th>
+                    <th>Endosomal escape evidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in experiment_rows %}
+                    {% with experiment=row.experiment %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'experiment_detail' experiment.id %}">
+                                {{ experiment.experiment_id }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'paper_detail' experiment.paper.id %}">
+                                {{ experiment.paper.title|truncatechars:80 }}
+                            </a>
+                        </td>
+                        <td>{{ experiment.paper.year }}</td>
+                        <td>
+                            <a href="{% url 'peptide_detail' experiment.peptide.id %}">
+                                {{ experiment.peptide }}
+                            </a>
+                        </td>
+                        <td>{{ experiment.rna_type|default:"" }}</td>
+                        <td>{{ experiment.delivery_success_class|default:"" }}</td>
+                        <td>{{ row.in_vivo_flag }}</td>
+                        <td>{{ row.uptake_confirmed }}</td>
+                        <td>{{ row.in_vitro_functional_effect }}</td>
+                        <td>{{ row.endosomal_escape_evidence }}</td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>
+            {% if page_obj.has_previous %}
+                <a href="?{% if query_string %}{{ query_string }}&{% endif %}page=1">First</a>
+                <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+                <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </p>
+    {% else %}
+        <p>No experiments imported yet.</p>
+    {% endif %}
+</body>
+</html>

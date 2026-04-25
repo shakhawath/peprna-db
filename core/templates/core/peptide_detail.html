@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{ peptide }}</title>
+</head>
+<body>
+    <p><a href="{% url 'browse' %}">Back to browse</a></p>
+    <h1>{{ peptide }}</h1>
+
+    <dl>
+        <dt>Peptide ID</dt>
+        <dd>{{ peptide.peptide_id }}</dd>
+        <dt>Raw sequence</dt>
+        <dd>{{ peptide.peptide_sequence_raw }}</dd>
+        <dt>Clean backbone</dt>
+        <dd>{{ peptide.peptide_backbone_clean|default:"" }}</dd>
+        <dt>Tokenized backbone</dt>
+        <dd>{{ peptide.peptide_backbone_tokenized|default:"" }}</dd>
+        <dt>Sequence engineering</dt>
+        <dd>{{ peptide.sequence_engineering_extracted|default:"" }}</dd>
+        <dt>Stereochemistry</dt>
+        <dd>{{ peptide.stereochemistry_detected|default:"" }}</dd>
+        <dt>Modifications</dt>
+        <dd>{{ peptide.peptide_modifications|default:"" }}</dd>
+        <dt>Sequence length</dt>
+        <dd>{{ peptide.sequence_length|default:"" }}</dd>
+        <dt>Noncanonical residues</dt>
+        <dd>{{ peptide.noncanonical_residues|default:"" }}</dd>
+    </dl>
+
+    <h2>Experiments</h2>
+    {% if experiments %}
+        <ul>
+            {% for experiment in experiments %}
+                <li>
+                    <a href="{% url 'experiment_detail' experiment.id %}">
+                        {{ experiment.experiment_id }}
+                    </a>
+                    from
+                    <a href="{% url 'paper_detail' experiment.paper.id %}">
+                        {{ experiment.paper.title|truncatechars:80 }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No experiments linked to this peptide.</p>
+    {% endif %}
+</body>
+</html>
