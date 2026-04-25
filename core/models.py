@@ -66,20 +66,20 @@ class Experiment(TimeStampedModel):
     paper = models.ForeignKey(Paper, on_delete=models.CASCADE, related_name="experiments")
     peptide = models.ForeignKey(Peptide, on_delete=models.CASCADE, related_name="experiments")
 
-    delivery_success_class = models.CharField(max_length=100, blank=True, null=True)
+    delivery_success_class = models.CharField(max_length=255, blank=True, null=True)
     in_vivo_flag = models.BooleanField(blank=True, null=True)
     uptake_confirmed = models.BooleanField(blank=True, null=True)
     label_confidence = models.CharField(max_length=50, blank=True, null=True, db_index=True)
     in_vitro_functional_effect = models.TextField(blank=True, null=True)
     endosomal_escape_evidence = models.TextField(blank=True, null=True)
 
-    rna_type = models.CharField(max_length=100, blank=True, null=True, db_index=True)
+    rna_type = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     rna_payload_or_target = models.TextField(blank=True, null=True)
     rna_modifications = models.TextField(blank=True, null=True)
 
-    peptide_concentration = models.CharField(max_length=100, blank=True, null=True)
-    rna_concentration = models.CharField(max_length=100, blank=True, null=True)
-    mixing_ratio = models.CharField(max_length=100, blank=True, null=True)
+    peptide_concentration = models.CharField(max_length=255, blank=True, null=True)
+    rna_concentration = models.CharField(max_length=255, blank=True, null=True)
+    mixing_ratio = models.CharField(max_length=255, blank=True, null=True)
 
     formulation_format = models.CharField(max_length=255, blank=True, null=True)
     formulation_components = models.TextField(blank=True, null=True)
@@ -94,7 +94,7 @@ class Experiment(TimeStampedModel):
 
     output_type = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     output_value = models.TextField(blank=True, null=True)
-    output_units = models.CharField(max_length=100, blank=True, null=True)
+    output_units = models.CharField(max_length=255, blank=True, null=True)
     output_notes = models.TextField(blank=True, null=True)
     toxicity_notes = models.TextField(blank=True, null=True)
 
