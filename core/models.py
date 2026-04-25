@@ -77,11 +77,11 @@ class Experiment(TimeStampedModel):
     rna_payload_or_target = models.TextField(blank=True, null=True)
     rna_modifications = models.TextField(blank=True, null=True)
 
-    peptide_concentration = models.CharField(max_length=255, blank=True, null=True)
-    rna_concentration = models.CharField(max_length=255, blank=True, null=True)
-    mixing_ratio = models.CharField(max_length=255, blank=True, null=True)
+    peptide_concentration = models.TextField(blank=True, null=True)
+    rna_concentration = models.TextField(blank=True, null=True)
+    mixing_ratio = models.TextField(blank=True, null=True)
 
-    formulation_format = models.CharField(max_length=255, blank=True, null=True)
+    formulation_format = models.TextField(blank=True, null=True)
     formulation_components = models.TextField(blank=True, null=True)
     size_nm = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     zeta_mv = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
@@ -90,9 +90,9 @@ class Experiment(TimeStampedModel):
     model_type = models.CharField(max_length=255, blank=True, null=True)
     cell_lines_or_primary_cells = models.TextField(blank=True, null=True)
     animal_model = models.TextField(blank=True, null=True)
-    administration_route = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    administration_route = models.TextField(blank=True, null=True)
 
-    output_type = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    output_type = models.TextField(blank=True, null=True)
     output_value = models.TextField(blank=True, null=True)
     output_units = models.CharField(max_length=255, blank=True, null=True)
     output_notes = models.TextField(blank=True, null=True)
