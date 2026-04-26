@@ -25,6 +25,32 @@
             <input id="rna_type" type="text" name="rna_type" value="{{ rna_type }}">
         </p>
         <p>
+            <label for="uptake_confirmed">Uptake confirmed</label>
+            <select id="uptake_confirmed" name="uptake_confirmed">
+                <option value="" {% if not uptake_confirmed %}selected{% endif %}>Any</option>
+                <option value="yes" {% if uptake_confirmed == "yes" %}selected{% endif %}>Yes</option>
+                <option value="no" {% if uptake_confirmed == "no" %}selected{% endif %}>No</option>
+            </select>
+        </p>
+        <p>
+            <label for="in_vitro_functional_effect">In vitro functional effect</label>
+            <select id="in_vitro_functional_effect" name="in_vitro_functional_effect">
+                <option value="" {% if not in_vitro_functional_effect %}selected{% endif %}>Any</option>
+                <option value="yes" {% if in_vitro_functional_effect == "yes" %}selected{% endif %}>Yes</option>
+                <option value="no" {% if in_vitro_functional_effect == "no" %}selected{% endif %}>No</option>
+                <option value="blank" {% if in_vitro_functional_effect == "blank" %}selected{% endif %}>Blank</option>
+            </select>
+        </p>
+        <p>
+            <label for="endosomal_escape_evidence">Endosomal escape evidence</label>
+            <select id="endosomal_escape_evidence" name="endosomal_escape_evidence">
+                <option value="" {% if not endosomal_escape_evidence %}selected{% endif %}>Any</option>
+                <option value="yes" {% if endosomal_escape_evidence == "yes" %}selected{% endif %}>Yes</option>
+                <option value="no" {% if endosomal_escape_evidence == "no" %}selected{% endif %}>No</option>
+                <option value="blank" {% if endosomal_escape_evidence == "blank" %}selected{% endif %}>Blank</option>
+            </select>
+        </p>
+        <p>
             <label for="in_vivo_flag">In vivo</label>
             <select id="in_vivo_flag" name="in_vivo_flag">
                 <option value="" {% if not in_vivo_flag %}selected{% endif %}>Any</option>
@@ -33,11 +59,12 @@
             </select>
         </p>
         <p>
-            <label for="uptake_confirmed">Uptake confirmed</label>
-            <select id="uptake_confirmed" name="uptake_confirmed">
-                <option value="" {% if not uptake_confirmed %}selected{% endif %}>Any</option>
-                <option value="yes" {% if uptake_confirmed == "yes" %}selected{% endif %}>Yes</option>
-                <option value="no" {% if uptake_confirmed == "no" %}selected{% endif %}>No</option>
+            <label for="delivery_success_class">Delivery Success Class</label>
+            <select id="delivery_success_class" name="delivery_success_class">
+                <option value="" {% if not delivery_success_class %}selected{% endif %}>Any</option>
+                <option value="yes" {% if delivery_success_class == "yes" %}selected{% endif %}>Yes</option>
+                <option value="no" {% if delivery_success_class == "no" %}selected{% endif %}>No</option>
+                <option value="blank" {% if delivery_success_class == "blank" %}selected{% endif %}>Blank</option>
             </select>
         </p>
         <p>
@@ -59,11 +86,11 @@
                     <th>Year</th>
                     <th>Peptide</th>
                     <th>RNA type</th>
-                    <th>Delivery class</th>
-                    <th>In vivo</th>
                     <th>Uptake confirmed</th>
                     <th>In vitro functional effect</th>
                     <th>Endosomal escape evidence</th>
+                    <th>In vivo</th>
+                    <th>Success class</th>
                 </tr>
             </thead>
             <tbody>
@@ -87,11 +114,11 @@
                             </a>
                         </td>
                         <td>{{ experiment.rna_type|default:"" }}</td>
-                        <td>{{ experiment.delivery_success_class|default:"" }}</td>
-                        <td>{{ row.in_vivo_flag }}</td>
                         <td>{{ row.uptake_confirmed }}</td>
                         <td>{{ row.in_vitro_functional_effect }}</td>
                         <td>{{ row.endosomal_escape_evidence }}</td>
+                        <td>{{ row.in_vivo_flag }}</td>
+                        <td>{{ row.delivery_success_class }}</td>
                     </tr>
                     {% endwith %}
                 {% endfor %}

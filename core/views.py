@@ -22,6 +22,7 @@ def yes_no_blank(value, blank_as_no=False):
 
 
 DISPLAY_AS_YES_NO = {
+    "delivery_success_class": False,
     "in_vivo_flag": True,
     "uptake_confirmed": True,
     "in_vitro_functional_effect": False,
@@ -71,8 +72,11 @@ def browse(request):
     )
     q = request.GET.get("q", "").strip()
     rna_type = request.GET.get("rna_type", "").strip()
-    in_vivo_flag = request.GET.get("in_vivo_flag", "").strip()
     uptake_confirmed = request.GET.get("uptake_confirmed", "").strip()
+    in_vitro_functional_effect = request.GET.get("in_vitro_functional_effect", "").strip()
+    endosomal_escape_evidence = request.GET.get("endosomal_escape_evidence", "").strip()
+    in_vivo_flag = request.GET.get("in_vivo_flag", "").strip()
+    delivery_success_class = request.GET.get("delivery_success_class", "").strip()
 
     if q:
         experiments = experiments.filter(
@@ -91,16 +95,47 @@ def browse(request):
     if rna_type:
         experiments = experiments.filter(rna_type__iexact=rna_type)
 
-    if in_vivo_flag == "yes":
-        experiments = experiments.filter(in_vivo_flag=True)
-    elif in_vivo_flag == "no":
-        experiments = experiments.filter(Q(in_vivo_flag=False) | Q(in_vivo_flag__isnull=True))
-
     if uptake_confirmed == "yes":
         experiments = experiments.filter(uptake_confirmed=True)
     elif uptake_confirmed == "no":
         experiments = experiments.filter(
             Q(uptake_confirmed=False) | Q(uptake_confirmed__isnull=True)
+        )
+
+    if in_vitro_functional_effect == "yes":
+        experiments = experiments.filter(in_vitro_functional_effect__in=["1", 1, True, "true", "yes"])
+    elif in_vitro_functional_effect == "no":
+        experiments = experiments.filter(in_vitro_functional_effect__in=["0", 0, False, "false", "no"])
+    elif in_vitro_functional_effect == "blank":
+        experiments = experiments.filter(
+            Q(in_vitro_functional_effect__isnull=True) | Q(in_vitro_functional_effect="")
+        )
+
+    if endosomal_escape_evidence == "yes":
+        experiments = experiments.filter(endosomal_escape_evidence__in=["1", 1, True, "true", "yes"])
+    elif endosomal_escape_evidence == "no":
+        experiments = experiments.filter(endosomal_escape_evidence__in=["0", 0, False, "false", "no"])
+    elif endosomal_escape_evidence == "blank":
+        experiments = experiments.filter(
+            Q(endosomal_escape_evidence__isnull=True) | Q(endosomal_escape_evidence="")
+        )
+
+    if in_vivo_flag == "yes":
+        experiments = experiments.filter(in_vivo_flag=True)
+    elif in_vivo_flag == "no":
+        experiments = experiments.filter(Q(in_vivo_flag=False) | Q(in_vivo_flag__isnull=True))
+
+    if delivery_success_class == "yes":
+        experiments = experiments.filter(
+            delivery_success_class__in=["1", 1, True, "true", "yes"]
+        )
+    elif delivery_success_class == "no":
+        experiments = experiments.filter(
+            delivery_success_class__in=["0", 0, False, "false", "no"]
+        )
+    elif delivery_success_class == "blank":
+        experiments = experiments.filter(
+            Q(delivery_success_class__isnull=True) | Q(delivery_success_class="")
         )
 
     paginator = Paginator(experiments, 100)
@@ -113,6 +148,7 @@ def browse(request):
         experiment_rows.append(
             {
                 "experiment": experiment,
+                "delivery_success_class": yes_no_blank(experiment.delivery_success_class),
                 "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag, blank_as_no=True),
                 "uptake_confirmed": yes_no_blank(
                     experiment.uptake_confirmed, blank_as_no=True
@@ -135,6 +171,9 @@ def browse(request):
             "rna_type": rna_type,
             "in_vivo_flag": in_vivo_flag,
             "uptake_confirmed": uptake_confirmed,
+            "in_vitro_functional_effect": in_vitro_functional_effect,
+            "endosomal_escape_evidence": endosomal_escape_evidence,
+            "delivery_success_class": delivery_success_class,
             "query_string": query_string,
         },
     )
@@ -244,12 +283,16 @@ def full_dataset_rows():
                 "stereochemistry_detected": experiment.peptide.stereochemistry_detected,
                 "peptide_modifications": experiment.peptide.peptide_modifications,
                 "noncanonical_residues": experiment.peptide.noncanonical_residues,
-                "delivery_success_class": experiment.delivery_success_class,
-                "in_vivo_flag": experiment.in_vivo_flag,
-                "uptake_confirmed": experiment.uptake_confirmed,
+                "delivery_success_class": yes_no_blank(experiment.delivery_success_class),
+                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag, blank_as_no=True),
+                "uptake_confirmed": yes_no_blank(experiment.uptake_confirmed, blank_as_no=True),
                 "label_confidence": experiment.label_confidence,
-                "in_vitro_functional_effect": experiment.in_vitro_functional_effect,
-                "endosomal_escape_evidence": experiment.endosomal_escape_evidence,
+                "in_vitro_functional_effect": yes_no_blank(
+                    experiment.in_vitro_functional_effect
+                ),
+                "endosomal_escape_evidence": yes_no_blank(
+                    experiment.endosomal_escape_evidence
+                ),
                 "rna_type": experiment.rna_type,
                 "rna_payload_or_target": experiment.rna_payload_or_target,
                 "rna_modifications": experiment.rna_modifications,
@@ -280,6 +323,20 @@ def export_dataframe_response(dataframe, filename):
     dataframe.to_excel(buffer, index=False)
     buffer.seek(0)
     return FileResponse(buffer, as_attachment=True, filename=filename)
+
+
+def normalize_export_yes_no_blank(dataframe):
+    conversions = {
+        "delivery_success_class": yes_no_blank,
+        "in_vivo_flag": lambda value: yes_no_blank(value, blank_as_no=True),
+        "uptake_confirmed": lambda value: yes_no_blank(value, blank_as_no=True),
+        "in_vitro_functional_effect": yes_no_blank,
+        "endosomal_escape_evidence": yes_no_blank,
+    }
+    for column, converter in conversions.items():
+        if column in dataframe.columns:
+            dataframe[column] = dataframe[column].map(converter)
+    return dataframe
 
 
 def download_dataset(request, kind):
@@ -322,6 +379,7 @@ def download_dataset(request, kind):
                 )
             )
         )
+        dataframe = normalize_export_yes_no_blank(dataframe)
         filename = "PepRNA-DB_experiments.xlsx"
     elif kind == "peptides":
         dataframe = pd.DataFrame(
@@ -359,4 +417,5 @@ def download_dataset(request, kind):
     else:
         raise Http404("File not found.")
 
+    dataframe = normalize_export_yes_no_blank(dataframe)
     return export_dataframe_response(dataframe, filename)

@@ -37,13 +37,14 @@
     <h2 id="key-experiment-labels">Key experiment labels</h2>
 
     <h3>Delivery success class</h3>
-    <p><strong>Values:</strong> 0 or 1</p>
+    <p><strong>Values shown on the website and in downloads:</strong> yes, no, or blank</p>
     <p>This is the primary binary label for in vivo delivery success.</p>
-    <p><strong>1</strong> means functional RNA delivery was demonstrated in vivo.</p>
-    <p><strong>0</strong> means no demonstrated in vivo functional RNA delivery.</p>
-    <p>A value of 1 is assigned only when the study reports functional RNA delivery in vivo, such as in vivo gene knockdown, splice correction, reporter expression, tumor growth suppression, phenotypic rescue, or survival benefit.</p>
-    <p>A value of 0 includes in vitro-only studies, uptake-only studies, screened systems that were not advanced to successful in vivo testing, and systems that were tested but failed.</p>
-    <p>Important: in vitro functional activity alone does not qualify as <code>delivery_success_class = 1</code>.</p>
+    <p><strong>Yes</strong> means functional RNA delivery was demonstrated in vivo.</p>
+    <p><strong>No</strong> means no demonstrated in vivo functional RNA delivery.</p>
+    <p><strong>Blank</strong> means no delivery success class was assigned.</p>
+    <p>A value of <strong>yes</strong> is assigned only when the study reports functional RNA delivery in vivo, such as in vivo gene knockdown, splice correction, reporter expression, tumor growth suppression, phenotypic rescue, or survival benefit.</p>
+    <p>A value of <strong>no</strong> includes in vitro-only studies, uptake-only studies, screened systems that were not advanced to successful in vivo testing, and systems that were tested but failed.</p>
+    <p>Important: in vitro functional activity alone does not qualify as delivery success class = <strong>yes</strong>.</p>
 
     <h3>Uptake confirmed</h3>
     <p><strong>Values shown on the website:</strong> yes or no</p>
@@ -53,18 +54,18 @@
     <p>Evidence may include fluorescence microscopy, confocal microscopy, flow cytometry, or similar assays showing cellular internalization of the RNA, peptide, or peptide-RNA complex.</p>
 
     <h3>In vitro functional effect</h3>
-    <p><strong>Values:</strong> 0, 1, or blank</p>
+    <p><strong>Values shown on the website and in downloads:</strong> yes, no, or blank</p>
     <p>This field indicates whether the RNA cargo produced a functional biological effect in vitro.</p>
-    <p><strong>1</strong> means functional RNA activity was demonstrated in vitro.</p>
-    <p><strong>0</strong> means uptake was shown, but no functional RNA effect was demonstrated, or the in vitro result was negative.</p>
+    <p><strong>Yes</strong> means functional RNA activity was demonstrated in vitro.</p>
+    <p><strong>No</strong> means uptake was shown, but no functional RNA effect was demonstrated, or the in vitro result was negative.</p>
     <p><strong>Blank</strong> means no data were available, the field was not applicable, or the experiment was not tested in vitro.</p>
     <p>Examples of functional in vitro effects include gene knockdown, reporter protein expression, splice correction, gene silencing, or other RNA-mediated biological activity.</p>
 
     <h3>Endosomal escape evidence</h3>
-    <p><strong>Values:</strong> 0, 1, or blank</p>
+    <p><strong>Values shown on the website and in downloads:</strong> yes, no, or blank</p>
     <p>This field describes whether the publication provided explicit evidence of endosomal or lysosomal escape.</p>
-    <p><strong>1</strong> means explicit evidence of endosomal or lysosomal escape was reported.</p>
-    <p><strong>0</strong> means explicit evidence of endosomal entrapment or lack of escape was reported.</p>
+    <p><strong>Yes</strong> means explicit evidence of endosomal or lysosomal escape was reported.</p>
+    <p><strong>No</strong> means explicit evidence of endosomal entrapment or lack of escape was reported.</p>
     <p><strong>Blank</strong> means no explicit evidence was reported, the mechanism was not discussed, or the evidence was ambiguous.</p>
     <p>Only explicit evidence is considered sufficient for <code>endosomal_escape_evidence = 1</code>. Examples may include cytosolic delivery assays, colocalization studies demonstrating release from endosomes or lysosomes, chloroquine- or bafilomycin-assisted escape experiments, direct evidence of membrane disruption, or other experiments directly supporting endosomal escape.</p>
     <p>Because this field requires explicit evidence, endosomal escape may remain blank even when <code>delivery_success_class = 1</code>. Successful in vivo functional delivery does not automatically imply that explicit endosomal escape evidence was reported.</p>
@@ -102,12 +103,13 @@
 
     <h2 id="searching-and-filtering">Searching and filtering</h2>
     <p>The Browse page allows users to search and filter experiment records by peptide, RNA type, delivery class, year, publication, in vivo testing, uptake, functional effect, and endosomal escape evidence.</p>
-    <p>Example uses include searching a peptide name to find all associated experiments, filtering by RNA type to compare siRNA, mRNA, ASO, or other RNA cargos, filtering <code>in_vivo_flag = 1</code> to view systems tested in animals, filtering <code>delivery_success_class = 1</code> to identify systems with demonstrated in vivo functional delivery, and comparing <code>uptake_confirmed = 1</code> with <code>in_vitro_functional_effect = 1</code> to distinguish uptake from functional intracellular delivery.</p>
+    <p>Example uses include searching a peptide name to find all associated experiments, filtering by RNA type to compare siRNA, mRNA, ASO, or other RNA cargos, filtering in vivo = <strong>yes</strong> to view systems tested in animals, filtering success class = <strong>yes</strong> to identify systems with demonstrated in vivo functional delivery, and comparing uptake confirmed = <strong>yes</strong> with in vitro functional effect = <strong>yes</strong> to distinguish uptake from functional intracellular delivery.</p>
 
     <h2 id="downloads">Downloads</h2>
     <p>The Downloads page provides access to structured database tables for reuse and analysis.</p>
     <p>Available files may include the full dataset, experiment table, peptide table, and publication table.</p>
     <p>Downloaded files can be used for statistical analysis, visualization, sequence analysis, and formulation comparison. Users should check the column descriptions and missing-value definitions before analysis.</p>
+    <p>In the downloadable Excel files, the fields <code>delivery_success_class</code>, <code>in_vivo_flag</code>, and <code>uptake_confirmed</code> are exported as <strong>yes</strong> or <strong>no</strong>. The fields <code>in_vitro_functional_effect</code> and <code>endosomal_escape_evidence</code> are exported as <strong>yes</strong>, <strong>no</strong>, or blank.</p>
 
     <h2 id="citation-and-reuse">Citation and reuse</h2>
     <p>PepRNA-DB is intended as a freely accessible research resource. Users should cite the database when using the data in publications, presentations, or derivative analyses.</p>
