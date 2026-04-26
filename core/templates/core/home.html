@@ -1,24 +1,13 @@
+{% extends "core/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Peptide-mediated RNA delivery database</title>
-</head>
-<body>
+
+{% block title %}PepRNA-DB{% endblock %}
+
+{% block content %}
     <h1>PepRNA-DB: Peptide-mediated RNA delivery database</h1>
     <p>A curated resource of literature-linked peptide-mediated RNA delivery experiments.</p>
 
-    <p>
-        <a href="{% url 'about' %}">About</a> |
-        <a href="{% url 'contact' %}">Contact</a> |
-        <a href="{% url 'browse' %}">Browse experiments</a> |
-        <a href="{% url 'downloads' %}">Downloads</a> |
-        <a href="{% url 'help' %}">Help</a> |
-        <a href="{% url 'faq' %}">FAQ</a>
-    </p>
-
-    <table style="border-collapse: collapse; width: 100%;">
+    <table class="home-figure-grid">
         <tr>
             <td style="padding-right: 8px; text-align: center; vertical-align: top; width: 36%; height: 405px;">
                 <img
@@ -56,7 +45,7 @@
     </table>
 
     <h2>Current statistics</h2>
-    <ul>
+    <ul class="stats-list">
         <li>Curated experiments: {{ stats.experiment_count }}</li>
         <li>Peptide systems: {{ stats.peptide_count }}</li>
         <li>Literature papers: {{ stats.paper_count }}</li>
@@ -66,5 +55,4 @@
 
     <h2>Start here</h2>
     <p>Use the <a href="{% url 'browse' %}">Browse experiments</a> page to search by experiment ID, paper title, DOI, PMID, peptide name, peptide sequence, or RNA target.</p>
-</body>
-</html>
+{% endblock %}

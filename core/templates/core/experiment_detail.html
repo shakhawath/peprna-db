@@ -1,11 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>{{ experiment.experiment_id }}</title>
-</head>
-<body>
-    <p><a href="{% url 'browse' %}">Back to browse</a></p>
+{% extends "core/base.html" %}
+
+{% block title %}{{ experiment.experiment_id }} | PepRNA-DB{% endblock %}
+
+{% block content %}
+    <p><a class="back-link" href="{% url 'browse' %}">Back to browse</a></p>
     <h1>{{ experiment.experiment_id }}</h1>
 
     <h2>Paper</h2>
@@ -19,7 +17,8 @@
     <p><strong>Sequence:</strong> {{ experiment.peptide.peptide_sequence_raw }}</p>
 
     <h2>All experiment fields</h2>
-    <table border="1" cellpadding="6" cellspacing="0">
+    <div class="table-wrap">
+    <table>
         <tbody>
             {% for field in experiment_fields %}
                 <tr>
@@ -29,5 +28,5 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+    </div>
+{% endblock %}

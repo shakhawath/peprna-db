@@ -1,19 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>About</title>
-</head>
-<body>
+{% extends "core/base.html" %}
+
+{% block title %}About | PepRNA-DB{% endblock %}
+
+{% block content %}
     <h1>About</h1>
-    <p>
-        <a href="{% url 'home' %}">Home</a> |
-        <a href="{% url 'browse' %}">Browse</a> |
-        <a href="{% url 'downloads' %}">Downloads</a> |
-        <a href="{% url 'faq' %}">FAQ</a> |
-        <a href="{% url 'help' %}">Help</a> |
-        <a href="{% url 'contact' %}">Contact</a>
-    </p>
 
     <p>PepRNA-DB is a curated database of peptide-based RNA delivery systems extracted from the scientific literature. The database is designed to support mechanistic analysis and comparison of peptide-mediated RNA delivery strategies.</p>
     <p>Each record represents a peptide, peptide formulation, or peptide-model combination extracted from an individual publication. When the same peptide-RNA system was tested under different experimental settings, such as in vitro and in vivo, separate experiment records are created.</p>
@@ -30,5 +20,4 @@
 
     <h2>Access</h2>
     <p>This database is intended to be freely accessible for browsing and literature-based exploration.</p>
-</body>
-</html>
+{% endblock %}

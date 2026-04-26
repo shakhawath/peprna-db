@@ -1,11 +1,9 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>{{ peptide }}</title>
-</head>
-<body>
-    <p><a href="{% url 'browse' %}">Back to browse</a></p>
+{% extends "core/base.html" %}
+
+{% block title %}{{ peptide }} | PepRNA-DB{% endblock %}
+
+{% block content %}
+    <p><a class="back-link" href="{% url 'browse' %}">Back to browse</a></p>
     <h1>{{ peptide }}</h1>
 
     <dl>
@@ -47,5 +45,4 @@
     {% else %}
         <p>No experiments linked to this peptide.</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}

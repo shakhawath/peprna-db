@@ -1,23 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Contact</title>
-</head>
-<body>
+{% extends "core/base.html" %}
+
+{% block title %}Contact | PepRNA-DB{% endblock %}
+
+{% block nav_extra %}<a href="/admin/">Admin</a>{% endblock %}
+
+{% block content %}
     <h1>Contact</h1>
-    <p>
-        <a href="{% url 'home' %}">Home</a> |
-        <a href="{% url 'about' %}">About</a> |
-        <a href="{% url 'browse' %}">Browse</a> |
-        <a href="{% url 'downloads' %}">Downloads</a> |
-        <a href="{% url 'help' %}">Help</a> |
-        <a href="{% url 'faq' %}">FAQ</a> |
-        <a href="/admin/">Admin</a>
-    </p>
 
     <p><strong>Shakhawath Hossain</strong></p>
     <p>Department of Pharmacy, Uppsala University, Uppsala</p>
     <p>Email: <a href="mailto:shakhawath.hossain@uu.se">shakhawath.hossain@uu.se</a></p>
-</body>
-</html>
+{% endblock %}

@@ -1,23 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Help</title>
-</head>
-<body>
+{% extends "core/base.html" %}
+
+{% block title %}Help | PepRNA-DB{% endblock %}
+
+{% block content %}
     <h1>Help</h1>
-    <p>
-        <a href="{% url 'home' %}">Home</a> |
-        <a href="{% url 'browse' %}">Browse</a> |
-        <a href="{% url 'downloads' %}">Downloads</a> |
-        <a href="{% url 'faq' %}">FAQ</a> |
-        <a href="{% url 'about' %}">About</a> |
-        <a href="{% url 'contact' %}">Contact</a>
-    </p>
 
     <p>This database collects curated experiments on peptide-mediated RNA delivery from the literature.</p>
 
-    <p>
+    <div class="toc">
         <a href="#experiment-records">Experiment records</a> |
         <a href="#key-experiment-labels">Key experiment labels</a> |
         <a href="#peptide-information">Peptide information</a> |
@@ -27,7 +17,7 @@
         <a href="#downloads">Downloads</a> |
         <a href="#citation-and-reuse">Citation and reuse</a> |
         <a href="#data-updates-and-corrections">Data updates and corrections</a>
-    </p>
+    </div>
 
     <h2 id="experiment-records">Experiment records</h2>
     <p>Each row in the experiment table corresponds to one peptide, peptide formulation, or peptide-model combination.</p>
@@ -118,5 +108,4 @@
     <h2 id="data-updates-and-corrections">Data updates and corrections</h2>
     <p>PepRNA-DB is a curated resource and may be updated as new literature becomes available or existing records are corrected.</p>
     <p>Users who identify missing information, possible errors, or relevant publications are encouraged to contact the database maintainers. Corrections will be reviewed and incorporated into future versions where appropriate.</p>
-</body>
-</html>
+{% endblock %}

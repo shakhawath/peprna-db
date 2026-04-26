@@ -1,0 +1,215 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}PepRNA-DB{% endblock %}</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --page-bg: #ffffff;
+            --text: #111827;
+            --muted: #4b5563;
+            --border: #d1d5db;
+            --link: #1d4ed8;
+            --link-hover: #1e40af;
+            --panel: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--page-bg);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.5;
+        }
+
+        a {
+            color: var(--link);
+        }
+
+        a:hover {
+            color: var(--link-hover);
+        }
+
+        .site-shell {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .site-nav {
+            margin: 0 0 24px;
+            font-size: 16px;
+        }
+
+        .site-nav a {
+            margin-right: 14px;
+            white-space: nowrap;
+        }
+
+        h1, h2, h3 {
+            color: var(--text);
+            margin-top: 0;
+        }
+
+        h1 {
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin: 0 0 16px;
+        }
+
+        ul, ol {
+            margin-top: 0;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 12px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        th {
+            background: var(--panel);
+        }
+
+        input[type="text"],
+        input[type="search"],
+        select,
+        textarea {
+            width: 100%;
+            max-width: 420px;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: #fff;
+            color: var(--text);
+            font: inherit;
+        }
+
+        button,
+        .button-link {
+            display: inline-block;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: var(--panel);
+            color: var(--text);
+            text-decoration: none;
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button:hover,
+        .button-link:hover {
+            background: #eef2f7;
+            color: var(--text);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px 20px;
+            margin-bottom: 16px;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .label-block label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .toc {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            margin-bottom: 24px;
+        }
+
+        .toc a {
+            text-decoration: none;
+        }
+
+        .stats-list li {
+            margin-bottom: 6px;
+        }
+
+        dl {
+            margin: 0 0 24px;
+        }
+
+        dt {
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        dd {
+            margin: 4px 0 0 0;
+        }
+
+        .page-section {
+            margin-bottom: 28px;
+        }
+
+        .home-figure-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 24px;
+        }
+
+        .home-figure-grid td {
+            border: 0;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="site-shell">
+        <nav class="site-nav">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'browse' %}">Browse experiments</a>
+            <a href="{% url 'downloads' %}">Downloads</a>
+            <a href="{% url 'help' %}">Help</a>
+            <a href="{% url 'faq' %}">FAQ</a>
+            <a href="{% url 'contact' %}">Contact</a>
+            {% block nav_extra %}{% endblock %}
+        </nav>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
