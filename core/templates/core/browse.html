@@ -133,7 +133,11 @@
                                 {{ experiment.peptide }}
                             </a>
                         </td>
-                        <td>{{ experiment.rna_type|default:"" }}</td>
+                        <td>
+                            {% if experiment.rna_type %}
+                                <a href="{% url 'rna_detail' experiment.id %}">{{ experiment.rna_type }}</a>
+                            {% endif %}
+                        </td>
                         <td>{{ row.uptake_confirmed }}</td>
                         <td>{{ row.in_vitro_functional_effect }}</td>
                         <td>{{ row.endosomal_escape_evidence }}</td>

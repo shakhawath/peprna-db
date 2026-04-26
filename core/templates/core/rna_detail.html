@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ experiment.rna_type|default:"RNA record" }} | PepRNA-DB{% endblock %}
+
+{% block content %}
+    <p><a class="back-link" href="{% url 'browse' %}">Back to browse</a></p>
+    <h1>{{ experiment.rna_type|default:"RNA record" }}</h1>
+
+    <p>
+        Linked experiment:
+        <a href="{% url 'experiment_detail' experiment.id %}">{{ experiment.experiment_id }}</a>
+    </p>
+    <p>
+        Linked peptide:
+        <a href="{% url 'peptide_detail' experiment.peptide.id %}">{{ experiment.peptide }}</a>
+    </p>
+    <p>
+        Linked paper:
+        <a href="{% url 'paper_detail' experiment.paper.id %}">{{ experiment.paper.title }}</a>
+        ({{ experiment.paper.year }})
+    </p>
+
+    <h2>RNA fields</h2>
+    <dl>
+        <dt>RNA Type</dt>
+        <dd>{{ experiment.rna_type|default:"" }}</dd>
+
+        <dt>RNA Payload Or Target</dt>
+        <dd>{{ experiment.rna_payload_or_target|default:"" }}</dd>
+
+        <dt>RNA Modifications</dt>
+        <dd>{{ experiment.rna_modifications|default:"" }}</dd>
+    </dl>
+{% endblock %}

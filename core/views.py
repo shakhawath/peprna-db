@@ -21,6 +21,15 @@ def yes_no_blank(value, blank_as_no=False):
     return value
 
 
+def canonical_peptide_name(value):
+    if value is None:
+        return ""
+    name = str(value).strip()
+    if name.lower() in {"599 peptide", "599"}:
+        return "INF7-G4-R9-K"
+    return name
+
+
 DISPLAY_AS_YES_NO = {
     "delivery_success_class": False,
     "in_vivo_flag": True,
@@ -32,7 +41,15 @@ DISPLAY_AS_YES_NO = {
 
 def model_field_rows(instance):
     rows = []
-    hidden_fields = {"id", "raw_row_hash", "created_at", "updated_at"}
+    hidden_fields = {
+        "id",
+        "raw_row_hash",
+        "created_at",
+        "updated_at",
+        "rna_type",
+        "rna_payload_or_target",
+        "rna_modifications",
+    }
     for field in instance._meta.fields:
         if field.name in hidden_fields:
             continue
@@ -167,6 +184,7 @@ def browse(request):
         experiment_rows.append(
             {
                 "experiment": experiment,
+                "peptide_name": canonical_peptide_name(experiment.peptide.peptide_name),
                 "delivery_success_class": yes_no_blank(experiment.delivery_success_class),
                 "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag, blank_as_no=True),
                 "uptake_confirmed": yes_no_blank(
@@ -211,6 +229,20 @@ def experiment_detail(request, experiment_id):
         {
             "experiment": experiment,
             "experiment_fields": model_field_rows(experiment),
+        },
+    )
+
+
+def rna_detail(request, experiment_id):
+    experiment = get_object_or_404(
+        Experiment.objects.select_related("paper", "peptide"),
+        pk=experiment_id,
+    )
+    return render(
+        request,
+        "core/rna_detail.html",
+        {
+            "experiment": experiment,
         },
     )
 
@@ -296,7 +328,7 @@ def full_dataset_rows():
                 "pmid": experiment.paper.pmid,
                 "year": experiment.paper.year,
                 "peptide_id": experiment.peptide.peptide_id,
-                "peptide_name": experiment.peptide.peptide_name,
+                "peptide_name": canonical_peptide_name(experiment.peptide.peptide_name),
                 "peptide_sequence_raw": experiment.peptide.peptide_sequence_raw,
                 "peptide_backbone_clean": experiment.peptide.peptide_backbone_clean,
                 "peptide_backbone_tokenized": experiment.peptide.peptide_backbone_tokenized,
@@ -419,6 +451,7 @@ def download_dataset(request, kind):
                 )
             )
         )
+        dataframe["peptide_name"] = dataframe["peptide_name"].map(canonical_peptide_name)
         filename = "PepRNA-DB_peptides.xlsx"
     elif kind == "papers":
         dataframe = pd.DataFrame(

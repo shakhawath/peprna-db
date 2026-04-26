@@ -16,6 +16,13 @@
     <p><a href="{% url 'peptide_detail' experiment.peptide.id %}">{{ experiment.peptide }}</a></p>
     <p><strong>Sequence:</strong> {{ experiment.peptide.peptide_sequence_raw }}</p>
 
+    <h2>RNA</h2>
+    <p>
+        {% if experiment.rna_type %}
+            <a href="{% url 'rna_detail' experiment.id %}">{{ experiment.rna_type }}</a>
+        {% endif %}
+    </p>
+
     <h2>All experiment fields</h2>
     <div class="table-wrap">
     <table>

@@ -41,8 +41,15 @@ class Peptide(TimeStampedModel):
     class Meta:
         ordering = ["peptide_name", "peptide_id"]
 
+    @property
+    def display_name(self):
+        name = (self.peptide_name or "").strip()
+        if name.lower() in {"599 peptide", "599"}:
+            return "INF7-G4-R9-K"
+        return name or self.peptide_id
+
     def __str__(self):
-        return self.peptide_name or self.peptide_id
+        return self.display_name
 
 
 class VocabTerm(TimeStampedModel):
