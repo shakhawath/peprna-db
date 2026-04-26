@@ -77,6 +77,9 @@ def browse(request):
     endosomal_escape_evidence = request.GET.get("endosomal_escape_evidence", "").strip()
     in_vivo_flag = request.GET.get("in_vivo_flag", "").strip()
     delivery_success_class = request.GET.get("delivery_success_class", "").strip()
+    per_page = request.GET.get("per_page", "100").strip()
+    if per_page not in {"50", "100", "200"}:
+        per_page = "100"
 
     if q:
         experiments = experiments.filter(
@@ -138,11 +141,27 @@ def browse(request):
             Q(delivery_success_class__isnull=True) | Q(delivery_success_class="")
         )
 
-    paginator = Paginator(experiments, 100)
+    paginator = Paginator(experiments, int(per_page))
     page_obj = paginator.get_page(request.GET.get("page"))
     query_params = request.GET.copy()
     query_params.pop("page", None)
     query_string = query_params.urlencode()
+    page_numbers = []
+    total_pages = paginator.num_pages
+    current_page = page_obj.number
+    if total_pages <= 7:
+        page_numbers = list(range(1, total_pages + 1))
+    else:
+        page_numbers.append(1)
+        start_page = max(2, current_page - 2)
+        end_page = min(total_pages - 1, current_page + 2)
+        if start_page > 2:
+            page_numbers.append("...")
+        page_numbers.extend(range(start_page, end_page + 1))
+        if end_page < total_pages - 1:
+            page_numbers.append("...")
+        page_numbers.append(total_pages)
+
     experiment_rows = []
     for experiment in page_obj:
         experiment_rows.append(
@@ -174,7 +193,9 @@ def browse(request):
             "in_vitro_functional_effect": in_vitro_functional_effect,
             "endosomal_escape_evidence": endosomal_escape_evidence,
             "delivery_success_class": delivery_success_class,
+            "per_page": per_page,
             "query_string": query_string,
+            "page_numbers": page_numbers,
         },
     )
 

@@ -58,6 +58,14 @@
                 <option value="blank" {% if delivery_success_class == "blank" %}selected{% endif %}>Blank</option>
                 </select>
             </div>
+            <div class="label-block">
+                <label for="per_page">Experiments per page</label>
+                <select id="per_page" name="per_page">
+                    <option value="50" {% if per_page == "50" %}selected{% endif %}>50</option>
+                    <option value="100" {% if per_page == "100" %}selected{% endif %}>100</option>
+                    <option value="200" {% if per_page == "200" %}selected{% endif %}>200</option>
+                </select>
+            </div>
         </div>
         <div class="filter-actions">
             <button type="submit">Apply filters</button>
@@ -68,7 +76,7 @@
     {% if experiment_rows %}
         <p>
             Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-            ({{ page_obj.paginator.count }} experiments total)
+            ({{ page_obj.paginator.count }} experiments total, {{ per_page }} per page)
         </p>
         <div class="table-wrap">
         <table>
@@ -123,6 +131,15 @@
                 <a href="?{% if query_string %}{{ query_string }}&{% endif %}page=1">First</a>
                 <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
             {% endif %}
+            {% for item in page_numbers %}
+                {% if item == "..." %}
+                    <span>...</span>
+                {% elif item == page_obj.number %}
+                    <strong>{{ item }}</strong>
+                {% else %}
+                    <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ item }}">{{ item }}</a>
+                {% endif %}
+            {% endfor %}
             {% if page_obj.has_next %}
                 <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
                 <a href="?{% if query_string %}{{ query_string }}&{% endif %}page={{ page_obj.paginator.num_pages }}">Last</a>
