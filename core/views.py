@@ -31,7 +31,7 @@ DISPLAY_AS_YES_NO = {
 
 def model_field_rows(instance):
     rows = []
-    hidden_fields = {"id", "raw_row_hash"}
+    hidden_fields = {"id", "raw_row_hash", "created_at", "updated_at"}
     for field in instance._meta.fields:
         if field.name in hidden_fields:
             continue
