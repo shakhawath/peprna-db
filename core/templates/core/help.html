@@ -37,7 +37,6 @@
     <h2 id="key-experiment-labels">Key experiment labels</h2>
 
     <h3>Delivery success class</h3>
-    <p><strong>Column name:</strong> <code>delivery_success_class</code></p>
     <p><strong>Values:</strong> 0 or 1</p>
     <p>This is the primary binary label for in vivo delivery success.</p>
     <p><strong>1</strong> means functional RNA delivery was demonstrated in vivo.</p>
@@ -47,15 +46,13 @@
     <p>Important: in vitro functional activity alone does not qualify as <code>delivery_success_class = 1</code>.</p>
 
     <h3>Uptake confirmed</h3>
-    <p><strong>Column name:</strong> <code>uptake_confirmed</code></p>
-    <p><strong>Values:</strong> 1 or blank</p>
+    <p><strong>Values shown on the website:</strong> yes or no</p>
     <p>This field describes whether cellular uptake or internalization was explicitly demonstrated.</p>
-    <p><strong>1</strong> means uptake or internalization was explicitly shown.</p>
-    <p><strong>Blank</strong> means uptake was not discussed, not tested, or not clearly demonstrated.</p>
+    <p><strong>Yes</strong> means uptake or internalization was explicitly shown.</p>
+    <p><strong>No</strong> means uptake was not discussed, not tested, or not clearly demonstrated.</p>
     <p>Evidence may include fluorescence microscopy, confocal microscopy, flow cytometry, or similar assays showing cellular internalization of the RNA, peptide, or peptide-RNA complex.</p>
 
     <h3>In vitro functional effect</h3>
-    <p><strong>Column name:</strong> <code>in_vitro_functional_effect</code></p>
     <p><strong>Values:</strong> 0, 1, or blank</p>
     <p>This field indicates whether the RNA cargo produced a functional biological effect in vitro.</p>
     <p><strong>1</strong> means functional RNA activity was demonstrated in vitro.</p>
@@ -64,7 +61,6 @@
     <p>Examples of functional in vitro effects include gene knockdown, reporter protein expression, splice correction, gene silencing, or other RNA-mediated biological activity.</p>
 
     <h3>Endosomal escape evidence</h3>
-    <p><strong>Column name:</strong> <code>endosomal_escape_evidence</code></p>
     <p><strong>Values:</strong> 0, 1, or blank</p>
     <p>This field describes whether the publication provided explicit evidence of endosomal or lysosomal escape.</p>
     <p><strong>1</strong> means explicit evidence of endosomal or lysosomal escape was reported.</p>
@@ -74,19 +70,17 @@
     <p>Because this field requires explicit evidence, endosomal escape may remain blank even when <code>delivery_success_class = 1</code>. Successful in vivo functional delivery does not automatically imply that explicit endosomal escape evidence was reported.</p>
 
     <h3>Label confidence</h3>
-    <p><strong>Column name:</strong> <code>label_confidence</code></p>
     <p>This field describes the confidence level assigned to a curated label based on the clarity and strength of evidence in the source publication.</p>
     <p><strong>High or very high</strong> means the article provides direct, explicit experimental evidence supporting the label.</p>
     <p><strong>Medium</strong> means the evidence supports the label but requires interpretation, or some details are incomplete.</p>
     <p><strong>Low</strong> means the label was assigned conservatively because the evidence was limited, indirect, or ambiguous.</p>
 
     <h3>In vivo flag</h3>
-    <p><strong>Column name:</strong> <code>in_vivo_flag</code></p>
-    <p><strong>Values:</strong> 0 or 1</p>
+    <p><strong>Values shown on the website:</strong> yes or no</p>
     <p>This field indicates whether an in vivo experiment was performed for the peptide-RNA system.</p>
-    <p><strong>1</strong> means the peptide-RNA system was tested in vivo.</p>
-    <p><strong>0</strong> means no in vivo experiment was reported.</p>
-    <p>The <code>in_vivo_flag</code> is separate from <code>delivery_success_class</code>. A system may have <code>in_vivo_flag = 1</code> but <code>delivery_success_class = 0</code> if in vivo testing was performed but functional RNA delivery was not demonstrated.</p>
+    <p><strong>Yes</strong> means the peptide-RNA system was tested in vivo.</p>
+    <p><strong>No</strong> means no in vivo experiment was reported.</p>
+    <p>The in vivo flag is separate from delivery success class. A system may be marked <strong>yes</strong> for in vivo testing but still have <code>delivery_success_class = 0</code> if in vivo testing was performed without demonstrated functional RNA delivery.</p>
 
     <h2 id="peptide-information">Peptide information</h2>
     <p>PepRNA-DB contains curated peptide information extracted from the source literature.</p>

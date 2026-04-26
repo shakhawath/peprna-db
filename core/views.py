@@ -11,14 +11,22 @@ import pandas as pd
 from .models import Experiment, Paper, Peptide
 
 
-def yes_no_blank(value):
+def yes_no_blank(value, blank_as_no=False):
     if value is None or value == "":
-        return ""
+        return "no" if blank_as_no else ""
     if value is True or value == 1 or str(value).strip().lower() in {"1", "true", "yes"}:
         return "yes"
     if value is False or value == 0 or str(value).strip().lower() in {"0", "false", "no"}:
         return "no"
     return value
+
+
+DISPLAY_AS_YES_NO = {
+    "in_vivo_flag": True,
+    "uptake_confirmed": True,
+    "in_vitro_functional_effect": False,
+    "endosomal_escape_evidence": False,
+}
 
 
 def model_field_rows(instance):
@@ -28,6 +36,8 @@ def model_field_rows(instance):
         if field.name in hidden_fields:
             continue
         value = getattr(instance, field.name)
+        if field.name in DISPLAY_AS_YES_NO:
+            value = yes_no_blank(value, blank_as_no=DISPLAY_AS_YES_NO[field.name])
         rows.append(
             {
                 "name": field.verbose_name.title(),
@@ -84,12 +94,14 @@ def browse(request):
     if in_vivo_flag == "yes":
         experiments = experiments.filter(in_vivo_flag=True)
     elif in_vivo_flag == "no":
-        experiments = experiments.filter(in_vivo_flag=False)
+        experiments = experiments.filter(Q(in_vivo_flag=False) | Q(in_vivo_flag__isnull=True))
 
     if uptake_confirmed == "yes":
         experiments = experiments.filter(uptake_confirmed=True)
     elif uptake_confirmed == "no":
-        experiments = experiments.filter(uptake_confirmed=False)
+        experiments = experiments.filter(
+            Q(uptake_confirmed=False) | Q(uptake_confirmed__isnull=True)
+        )
 
     paginator = Paginator(experiments, 100)
     page_obj = paginator.get_page(request.GET.get("page"))
@@ -101,8 +113,10 @@ def browse(request):
         experiment_rows.append(
             {
                 "experiment": experiment,
-                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag),
-                "uptake_confirmed": yes_no_blank(experiment.uptake_confirmed),
+                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag, blank_as_no=True),
+                "uptake_confirmed": yes_no_blank(
+                    experiment.uptake_confirmed, blank_as_no=True
+                ),
                 "in_vitro_functional_effect": yes_no_blank(
                     experiment.in_vitro_functional_effect
                 ),
