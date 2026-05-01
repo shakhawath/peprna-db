@@ -49,6 +49,18 @@ def peptide_signature(experiment):
     )
 
 
+def has_peptide_sequence_information(experiment):
+    peptide = experiment.peptide
+    return any(
+        normalized_signature_part(value)
+        for value in [
+            peptide.peptide_sequence_raw,
+            peptide.peptide_backbone_clean,
+            peptide.peptide_backbone_tokenized,
+        ]
+    )
+
+
 def rna_signature(experiment):
     return (
         normalized_signature_part(experiment.rna_type),
@@ -115,13 +127,15 @@ def home(request):
     experiments = list(
         Experiment.objects.select_related("peptide").all()
     )
-    peptide_systems = {peptide_signature(experiment) for experiment in experiments}
+    sequence_informed_peptide_experiments = [
+        experiment for experiment in experiments if has_peptide_sequence_information(experiment)
+    ]
+    peptide_systems = {
+        peptide_signature(experiment) for experiment in sequence_informed_peptide_experiments
+    }
     sequence_informed_experiments = [
         experiment for experiment in experiments if has_rna_sequence_information(experiment)
     ]
-    sequence_informed_peptide_systems = {
-        peptide_signature(experiment) for experiment in sequence_informed_experiments
-    }
     rna_systems = {
         signature
         for experiment in sequence_informed_experiments
@@ -130,7 +144,9 @@ def home(request):
     }
     peptide_rna_systems = {
         (peptide_signature(experiment), rna_signature(experiment))
-        for experiment in sequence_informed_experiments
+        for experiment in experiments
+        if has_peptide_sequence_information(experiment)
+        and has_rna_sequence_information(experiment)
         if any(rna_signature(experiment))
     }
     stats = {
@@ -138,7 +154,7 @@ def home(request):
         "peptide_count": len(peptide_systems),
         "paper_count": Paper.objects.count(),
         "in_vivo_count": sum(1 for experiment in experiments if experiment.in_vivo_flag is True),
-        "sequence_peptide_system_count": len(sequence_informed_peptide_systems),
+        "sequence_peptide_system_count": len(peptide_systems),
         "rna_system_count": len(rna_systems),
         "peptide_rna_system_count": len(peptide_rna_systems),
     }
