@@ -30,6 +30,37 @@ def canonical_peptide_name(value):
     return name
 
 
+def normalized_signature_part(value):
+    if value is None:
+        return ""
+    return " ".join(str(value).strip().split())
+
+
+def peptide_signature(experiment):
+    peptide = experiment.peptide
+    return (
+        normalized_signature_part(peptide.peptide_backbone_clean),
+        normalized_signature_part(peptide.peptide_backbone_tokenized),
+        normalized_signature_part(peptide.peptide_sequence_raw),
+        normalized_signature_part(peptide.sequence_engineering_extracted),
+        normalized_signature_part(peptide.stereochemistry_detected),
+        normalized_signature_part(peptide.peptide_modifications),
+        normalized_signature_part(peptide.noncanonical_residues),
+    )
+
+
+def rna_signature(experiment):
+    return (
+        normalized_signature_part(experiment.rna_type),
+        normalized_signature_part(experiment.rna_payload_or_target),
+        normalized_signature_part(experiment.target_gene_or_transcript),
+        normalized_signature_part(experiment.rna_sequence),
+        normalized_signature_part(experiment.sense_strand),
+        normalized_signature_part(experiment.antisense_strand),
+        normalized_signature_part(experiment.rna_modifications),
+    )
+
+
 DISPLAY_AS_YES_NO = {
     "delivery_success_class": False,
     "in_vivo_flag": True,
@@ -70,18 +101,28 @@ def model_field_rows(instance):
 
 
 def home(request):
+    experiments = list(
+        Experiment.objects.select_related("peptide").all()
+    )
+    peptide_systems = {peptide_signature(experiment) for experiment in experiments}
+    rna_systems = {
+        signature
+        for experiment in experiments
+        for signature in [rna_signature(experiment)]
+        if any(signature)
+    }
+    peptide_rna_systems = {
+        (peptide_signature(experiment), rna_signature(experiment))
+        for experiment in experiments
+        if any(rna_signature(experiment))
+    }
     stats = {
-        "experiment_count": Experiment.objects.count(),
-        "peptide_count": Peptide.objects.count(),
+        "experiment_count": len(experiments),
+        "peptide_count": len(peptide_systems),
         "paper_count": Paper.objects.count(),
-        "in_vivo_count": Experiment.objects.filter(in_vivo_flag=True).count(),
-        "rna_type_count": (
-            Experiment.objects.exclude(rna_type__isnull=True)
-            .exclude(rna_type="")
-            .values("rna_type")
-            .distinct()
-            .count()
-        ),
+        "in_vivo_count": sum(1 for experiment in experiments if experiment.in_vivo_flag is True),
+        "rna_system_count": len(rna_systems),
+        "peptide_rna_system_count": len(peptide_rna_systems),
     }
     return render(request, "core/home.html", {"stats": stats})
 

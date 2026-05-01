@@ -45,13 +45,32 @@
     </table>
 
     <h2>Current statistics</h2>
-    <ul class="stats-list">
-        <li>Curated experiments: {{ stats.experiment_count }}</li>
-        <li>Peptide systems: {{ stats.peptide_count }}</li>
-        <li>Literature papers: {{ stats.paper_count }}</li>
-        <li>In vivo experiments: {{ stats.in_vivo_count }}</li>
-        <li>Distinct RNA types: {{ stats.rna_type_count }}</li>
-    </ul>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <p class="stat-value">{{ stats.paper_count }}</p>
+            <p class="stat-label">Literature papers</p>
+        </div>
+        <div class="stat-card">
+            <p class="stat-value">{{ stats.experiment_count }}</p>
+            <p class="stat-label">Curated experiments</p>
+        </div>
+        <div class="stat-card">
+            <p class="stat-value">{{ stats.in_vivo_count }}</p>
+            <p class="stat-label">In vivo experiments</p>
+        </div>
+        <div class="stat-card">
+            <p class="stat-value">{{ stats.peptide_count }}</p>
+            <p class="stat-label">Peptide systems</p>
+        </div>
+        <div class="stat-card">
+            <p class="stat-value">{{ stats.rna_system_count }}</p>
+            <p class="stat-label">RNA systems</p>
+        </div>
+        <div class="stat-card">
+            <p class="stat-value">{{ stats.peptide_rna_system_count }}</p>
+            <p class="stat-label">Peptide-RNA combination systems</p>
+        </div>
+    </div>
 
     <h2>Start here</h2>
     <p>Use the <a href="{% url 'browse' %}">Browse experiments</a> page to search by experiment ID, paper title, DOI, PMID, peptide name, peptide sequence, or RNA target.</p>

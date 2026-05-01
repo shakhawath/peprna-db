@@ -168,6 +168,35 @@
             margin-bottom: 6px;
         }
 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin: 20px 0 32px;
+        }
+
+        .stat-card {
+            background: #f9faf7;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 28px 32px;
+            min-height: 170px;
+        }
+
+        .stat-value {
+            font-size: 56px;
+            line-height: 1;
+            margin: 0 0 18px;
+            color: #163847;
+            font-weight: 400;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: var(--text);
+            margin: 0;
+        }
+
         dl {
             margin: 0 0 24px;
         }
@@ -193,6 +222,12 @@
 
         .home-figure-grid td {
             border: 0;
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
     {% block extra_head %}{% endblock %}
