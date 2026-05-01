@@ -310,7 +310,7 @@ class Command(BaseCommand):
                 model_scope = as_string(row_value(row, "model_scope")) or infer_model_scope(
                     model_type, in_vivo_flag
                 )
-                rna_type = as_string(row_value(row, "rna_type"))
+                rna_type = as_string(row_value(row, "rna_type_final", "rna_type"))
                 output_type = as_string(row_value(row, "output_type"))
 
                 if not rna_type:
@@ -339,8 +339,36 @@ class Command(BaseCommand):
                         row_value(row, "endosomal_escape_evidence")
                     ),
                     "rna_type": rna_type,
-                    "rna_payload_or_target": as_string(row_value(row, "rna_payload_or_target")),
-                    "rna_modifications": as_string(row_value(row, "rna_modifications")),
+                    "rna_payload_or_target": as_string(
+                        row_value(
+                            row,
+                            "rna_name_or_payload_final",
+                            "rna_payload_or_target",
+                        )
+                    ),
+                    "target_gene_or_transcript": as_string(
+                        row_value(
+                            row,
+                            "target_gene_or_target_final",
+                            "target_gene_or_transcript",
+                        )
+                    ),
+                    "rna_sequence": as_string(
+                        row_value(row, "rna_sequence_final", "rna_sequence")
+                    ),
+                    "sense_strand": as_string(
+                        row_value(row, "sense_strand_final", "sense_strand")
+                    ),
+                    "antisense_strand": as_string(
+                        row_value(row, "antisense_strand_final", "antisense_strand")
+                    ),
+                    "rna_modifications": as_string(
+                        row_value(
+                            row,
+                            "rna_chemistry_or_modification_final",
+                            "rna_modifications",
+                        )
+                    ),
                     "peptide_concentration": as_string(row_value(row, "peptide_concentration")),
                     "rna_concentration": as_string(row_value(row, "rna_concentration")),
                     "mixing_ratio": as_string(row_value(row, "mixing_ratio")),

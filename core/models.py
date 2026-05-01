@@ -82,6 +82,10 @@ class Experiment(TimeStampedModel):
 
     rna_type = models.CharField(max_length=255, blank=True, null=True, db_index=True)
     rna_payload_or_target = models.TextField(blank=True, null=True)
+    target_gene_or_transcript = models.TextField(blank=True, null=True)
+    rna_sequence = models.TextField(blank=True, null=True)
+    sense_strand = models.TextField(blank=True, null=True)
+    antisense_strand = models.TextField(blank=True, null=True)
     rna_modifications = models.TextField(blank=True, null=True)
 
     peptide_concentration = models.TextField(blank=True, null=True)

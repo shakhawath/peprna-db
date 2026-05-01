@@ -20,15 +20,42 @@
         ({{ experiment.paper.year }})
     </p>
 
-    <h2>RNA fields</h2>
+    <h2>RNA overview</h2>
     <dl>
         <dt>RNA Type</dt>
         <dd>{{ experiment.rna_type|default:"" }}</dd>
 
-        <dt>RNA Payload Or Target</dt>
+        <dt>Payload/target</dt>
         <dd>{{ experiment.rna_payload_or_target|default:"" }}</dd>
 
-        <dt>RNA Modifications</dt>
+        <dt>Target gene/transcript</dt>
+        <dd>{{ experiment.target_gene_or_transcript|default:"" }}</dd>
+    </dl>
+
+    <h2>Sequence information</h2>
+    <dl>
+        <dt>Sequence reported in source article</dt>
+        <dd>
+            {% if experiment.rna_sequence or experiment.sense_strand or experiment.antisense_strand %}
+                yes
+            {% else %}
+                no
+            {% endif %}
+        </dd>
+
+        <dt>RNA sequence</dt>
+        <dd>{{ experiment.rna_sequence|default:"" }}</dd>
+
+        <dt>Sense strand</dt>
+        <dd>{{ experiment.sense_strand|default:"" }}</dd>
+
+        <dt>Antisense strand</dt>
+        <dd>{{ experiment.antisense_strand|default:"" }}</dd>
+    </dl>
+
+    <h2>Chemical modifications</h2>
+    <dl>
+        <dt>RNA modifications</dt>
         <dd>{{ experiment.rna_modifications|default:"" }}</dd>
     </dl>
 {% endblock %}
