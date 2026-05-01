@@ -82,10 +82,13 @@
     <p>When available, peptide modifications are preserved in descriptive fields rather than being forced into the cleaned amino acid sequence. This allows the database to retain both computationally usable sequence representations and human-readable modification details.</p>
 
     <h2 id="rna-information">RNA information</h2>
-    <p>PepRNA-DB now includes expanded RNA annotations curated directly from the source articles.</p>
-    <p>The RNA section may include RNA type, payload or named RNA cargo, target gene or transcript, reported RNA sequence, sense strand, antisense strand, and RNA chemistry or modification information.</p>
-    <p>These fields are shown through the clickable RNA type links in the browse table and are grouped into RNA overview, sequence information, and chemical modifications.</p>
-    <p>Not every experiment includes all RNA details. When a publication did not report sequence or chemistry information clearly, those fields remain blank.</p>
+    <p>PepRNA-DB contains curated RNA and nucleic-acid cargo information extracted from the source literature and linked to individual peptide-mediated delivery experiments.</p>
+    <p>The RNA curation workflow was designed to capture both human-readable cargo descriptions and machine-readable sequence information where available. The RNA section may include RNA type, named RNA cargo or payload, target gene or transcript, reported RNA sequence, sense strand, antisense strand, sequence format, RNA chemistry or modification information, and annotation confidence.</p>
+    <p>RNA type describes the class of nucleic-acid cargo used in the experiment, such as siRNA, mRNA, ASO, SCO, miRNA, shRNA, sgRNA, or pDNA. Although PepRNA-DB focuses on RNA delivery, some nucleic-acid cargoes such as plasmid DNA are retained when they were delivered using peptide-based systems in the curated literature.</p>
+    <p>The payload or target field describes the RNA cargo in a human-readable form, for example EGFP-targeting siRNA, pLuc705 splice-correcting oligonucleotide, luciferase mRNA, Cas9 mRNA, or VEGF siRNA. When available, the target gene or transcript is recorded separately to support searching and comparison across experiments.</p>
+    <p>Sequence information is recorded when the source article reports the RNA sequence clearly. For duplex or paired cargos, sense and antisense strands may be shown separately. When both strands are available, the combined RNA sequence field may include labelled strand information. For long cargos such as mRNA or plasmid constructs, the database may describe the cargo or construct rather than provide a full sequence if the complete sequence was not reported in the article.</p>
+    <p>RNA chemistry and modification information is curated from reported backbone chemistry, terminal modifications, conjugations, labels, and other chemical modifications. Examples include 2'-O-methyl modification, phosphorothioate backbone, LNA, morpholino chemistry, fluorescent labels, cholesterol conjugation, or other reported RNA modifications. These annotations are preserved in descriptive fields because chemical details are often reported inconsistently across publications.</p>
+    <p>Fields marked as “not reported” usually mean that the information was not reported, was unclear, or could not be confidently extracted from the source article.</p>
 
     <h2 id="missing-values">Missing values</h2>
     <p>Missing values are represented as blank cells.</p>
