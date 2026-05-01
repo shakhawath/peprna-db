@@ -61,6 +61,17 @@ def rna_signature(experiment):
     )
 
 
+def has_rna_sequence_information(experiment):
+    return any(
+        normalized_signature_part(value)
+        for value in [
+            experiment.rna_sequence,
+            experiment.sense_strand,
+            experiment.antisense_strand,
+        ]
+    )
+
+
 DISPLAY_AS_YES_NO = {
     "delivery_success_class": False,
     "in_vivo_flag": True,
@@ -105,15 +116,21 @@ def home(request):
         Experiment.objects.select_related("peptide").all()
     )
     peptide_systems = {peptide_signature(experiment) for experiment in experiments}
+    sequence_informed_experiments = [
+        experiment for experiment in experiments if has_rna_sequence_information(experiment)
+    ]
+    sequence_informed_peptide_systems = {
+        peptide_signature(experiment) for experiment in sequence_informed_experiments
+    }
     rna_systems = {
         signature
-        for experiment in experiments
+        for experiment in sequence_informed_experiments
         for signature in [rna_signature(experiment)]
         if any(signature)
     }
     peptide_rna_systems = {
         (peptide_signature(experiment), rna_signature(experiment))
-        for experiment in experiments
+        for experiment in sequence_informed_experiments
         if any(rna_signature(experiment))
     }
     stats = {
@@ -121,6 +138,7 @@ def home(request):
         "peptide_count": len(peptide_systems),
         "paper_count": Paper.objects.count(),
         "in_vivo_count": sum(1 for experiment in experiments if experiment.in_vivo_flag is True),
+        "sequence_peptide_system_count": len(sequence_informed_peptide_systems),
         "rna_system_count": len(rna_systems),
         "peptide_rna_system_count": len(peptide_rna_systems),
     }
