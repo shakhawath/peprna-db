@@ -36,7 +36,7 @@
     <dl>
         <dt>Sequence reported in source article</dt>
         <dd>
-            {% if experiment.rna_sequence or experiment.sense_strand or experiment.antisense_strand %}
+            {% if sequence_reported_in_source %}
                 yes
             {% else %}
                 no

@@ -36,6 +36,27 @@ def normalized_signature_part(value):
     return " ".join(str(value).strip().split())
 
 
+SEQUENCE_PLACEHOLDERS = {
+    "",
+    "not reported",
+    "not clearly reported",
+    "not provided",
+    "not available",
+    "na",
+    "n/a",
+    "none",
+    "nan",
+    "unknown",
+}
+
+
+def has_real_sequence_text(value):
+    normalized = normalized_signature_part(value)
+    if not normalized:
+        return False
+    return normalized.lower() not in SEQUENCE_PLACEHOLDERS
+
+
 def peptide_signature(experiment):
     peptide = experiment.peptide
     return (
@@ -52,7 +73,7 @@ def peptide_signature(experiment):
 def has_peptide_sequence_information(experiment):
     peptide = experiment.peptide
     return any(
-        normalized_signature_part(value)
+        has_real_sequence_text(value)
         for value in [
             peptide.peptide_sequence_raw,
             peptide.peptide_backbone_clean,
@@ -75,7 +96,7 @@ def rna_signature(experiment):
 
 def has_rna_sequence_information(experiment):
     return any(
-        normalized_signature_part(value)
+        has_real_sequence_text(value)
         for value in [
             experiment.rna_sequence,
             experiment.sense_strand,
@@ -322,6 +343,7 @@ def rna_detail(request, experiment_id):
         "core/rna_detail.html",
         {
             "experiment": experiment,
+            "sequence_reported_in_source": has_rna_sequence_information(experiment),
         },
     )
 
