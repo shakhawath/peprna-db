@@ -5,7 +5,8 @@
 
 {% block content %}
     <h1>PepRNA-DB: Peptide-mediated RNA delivery database</h1>
-    <p>A curated resource of literature-linked peptide-mediated RNA delivery experiments.</p>
+    <p>PepRNA-DB is a curated, literature-derived resource for peptide-mediated delivery of RNA and related nucleic-acid cargoes.</p>
+    <p>The database links source publications to peptide sequence and chemistry, <strong>nucleic-acid sequences</strong> and cargo information, formulation context, biological model, uptake evidence, in vitro functional activity, endosomal escape evidence, and in vivo delivery outcome.</p>
 
     <table class="home-figure-grid">
         <tr>
@@ -64,14 +65,14 @@
         </div>
         <div class="stat-card stat-card--blue">
             <p class="stat-value">{{ stats.rna_system_count }}</p>
-            <p class="stat-label">RNA systems with sequence information</p>
+            <p class="stat-label">Nucleic-acid systems with sequence information</p>
         </div>
         <div class="stat-card stat-card--orange">
             <p class="stat-value">{{ stats.peptide_rna_system_count }}</p>
-            <p class="stat-label">Peptide-RNA systems with sequence information</p>
+            <p class="stat-label">Peptide-nucleic-acid systems with sequence information</p>
         </div>
     </div>
 
     <h2>Start here</h2>
-    <p>Use the <a href="{% url 'browse' %}">Browse experiments</a> page to search by experiment ID, paper title, DOI, PMID, peptide name, peptide sequence, or RNA target.</p>
+    <p>Use the <a href="{% url 'browse' %}">Browse experiments</a> page to search by experiment ID, paper title, DOI, PMID, peptide name, peptide sequence, RNA type, pDNA, or target gene.</p>
 {% endblock %}
