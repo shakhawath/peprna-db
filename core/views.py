@@ -199,7 +199,19 @@ def home(request):
     return render(request, "core/home.html", {"stats": stats})
 
 
-def browse(request):
+def rna_type_filter_options():
+    return [
+        value
+        for value in Experiment.objects.exclude(rna_type__isnull=True)
+        .exclude(rna_type="")
+        .order_by("rna_type")
+        .values_list("rna_type", flat=True)
+        .distinct()
+        if normalized_signature_part(value).lower() not in RNA_TYPE_EXCLUDE_FROM_FILTER
+    ]
+
+
+def filtered_experiments_from_request(request):
     experiments = (
         Experiment.objects.select_related("paper", "peptide")
         .order_by("experiment_id")
@@ -214,16 +226,6 @@ def browse(request):
     per_page = request.GET.get("per_page", "100").strip()
     if per_page not in {"50", "100", "200"}:
         per_page = "100"
-
-    rna_type_options = [
-        value
-        for value in Experiment.objects.exclude(rna_type__isnull=True)
-        .exclude(rna_type="")
-        .order_by("rna_type")
-        .values_list("rna_type", flat=True)
-        .distinct()
-        if normalized_signature_part(value).lower() not in RNA_TYPE_EXCLUDE_FROM_FILTER
-    ]
 
     if q:
         experiments = experiments.filter(
@@ -290,6 +292,31 @@ def browse(request):
         experiments = experiments.filter(
             Q(delivery_success_class__isnull=True) | Q(delivery_success_class="")
         )
+
+    filters = {
+        "q": q,
+        "rna_type": rna_type,
+        "uptake_confirmed": uptake_confirmed,
+        "in_vitro_functional_effect": in_vitro_functional_effect,
+        "endosomal_escape_evidence": endosomal_escape_evidence,
+        "in_vivo_flag": in_vivo_flag,
+        "delivery_success_class": delivery_success_class,
+        "per_page": per_page,
+    }
+    return experiments, filters
+
+
+def browse(request):
+    experiments, filters = filtered_experiments_from_request(request)
+    q = filters["q"]
+    rna_type = filters["rna_type"]
+    uptake_confirmed = filters["uptake_confirmed"]
+    in_vitro_functional_effect = filters["in_vitro_functional_effect"]
+    endosomal_escape_evidence = filters["endosomal_escape_evidence"]
+    in_vivo_flag = filters["in_vivo_flag"]
+    delivery_success_class = filters["delivery_success_class"]
+    per_page = filters["per_page"]
+    rna_type_options = rna_type_filter_options()
 
     paginator = Paginator(experiments, int(per_page))
     page_obj = paginator.get_page(request.GET.get("page"))
@@ -454,8 +481,9 @@ def downloads_page(request):
     return render(request, "core/downloads.html", {"downloads": downloads})
 
 
-def full_dataset_rows():
-    experiments = Experiment.objects.select_related("paper", "peptide").order_by("experiment_id")
+def full_dataset_rows(experiments=None):
+    if experiments is None:
+        experiments = Experiment.objects.select_related("paper", "peptide").order_by("experiment_id")
     rows = []
     for experiment in experiments:
         rows.append(
@@ -513,6 +541,16 @@ def full_dataset_rows():
             }
         )
     return rows
+
+
+def download_filtered_experiments(request):
+    experiments, _ = filtered_experiments_from_request(request)
+    dataframe = pd.DataFrame(full_dataset_rows(experiments))
+    dataframe = normalize_export_yes_no_blank(dataframe)
+    return export_dataframe_response(
+        dataframe,
+        "PepRNA-DB_filtered_experiments.xlsx",
+    )
 
 
 def export_dataframe_response(dataframe, filename):

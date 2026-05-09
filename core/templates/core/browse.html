@@ -75,6 +75,7 @@
         </div>
         <div class="filter-actions">
             <button type="submit">Apply filters</button>
+            <a class="button-link" href="{% url 'download_filtered_experiments' %}{% if query_string %}?{{ query_string }}{% endif %}">Download filtered results</a>
             <a href="{% url 'browse' %}">Clear</a>
         </div>
     </form>
