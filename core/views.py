@@ -177,6 +177,15 @@ def home(request):
         and has_rna_sequence_information(experiment)
         if any(rna_signature(experiment))
     }
+    cargo_class_count = len(
+        {
+            normalized_signature_part(experiment.rna_type)
+            for experiment in experiments
+            if normalized_signature_part(experiment.rna_type)
+            and normalized_signature_part(experiment.rna_type).lower()
+            not in RNA_TYPE_EXCLUDE_FROM_FILTER
+        }
+    )
     stats = {
         "experiment_count": len(experiments),
         "peptide_count": len(peptide_systems),
@@ -185,6 +194,7 @@ def home(request):
         "sequence_peptide_system_count": len(peptide_systems),
         "rna_system_count": len(rna_systems),
         "peptide_rna_system_count": len(peptide_rna_systems),
+        "cargo_class_count": cargo_class_count,
     }
     return render(request, "core/home.html", {"stats": stats})
 
