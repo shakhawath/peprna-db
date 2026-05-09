@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Downloads</h1>
 
-    <p>This page provides downloadable exports generated directly from the current database.</p>
+    <p>This page provides downloadable exports generated directly from the current database. The files are intended to support reproducible analysis, visualization, sequence comparison, and reuse of the curated literature records.</p>
 
     <ul>
         {% for item in downloads %}
@@ -16,5 +16,7 @@
         {% endfor %}
     </ul>
 
-    <p>The full curated dataset export includes linked paper, peptide, and experiment fields. The table-specific downloads provide unique papers, unique peptides, or experiment-only records.</p>
+    <p>These downloads are generated from the current database, so they update after the database is reloaded from a revised Excel file.</p>
+    <p>The full curated dataset export includes linked paper, peptide, cargo, formulation, biological model, and experiment outcome fields. The table-specific downloads provide unique papers, unique peptides, unique RNA/nucleic-acid systems, or experiment-only records.</p>
+    <p>Although PepRNA-DB is focused on peptide-mediated RNA delivery, the exports also retain related pDNA records when plasmid DNA was reported in the curated peptide-delivery literature.</p>
 {% endblock %}

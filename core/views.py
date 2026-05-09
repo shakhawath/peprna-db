@@ -50,6 +50,13 @@ SEQUENCE_PLACEHOLDERS = {
 }
 
 
+RNA_TYPE_EXCLUDE_FROM_FILTER = {
+    "not reported",
+    "rna unspecified",
+    "rna, unspecified",
+}
+
+
 def has_real_sequence_text(value):
     normalized = normalized_signature_part(value)
     if not normalized:
@@ -198,6 +205,16 @@ def browse(request):
     if per_page not in {"50", "100", "200"}:
         per_page = "100"
 
+    rna_type_options = [
+        value
+        for value in Experiment.objects.exclude(rna_type__isnull=True)
+        .exclude(rna_type="")
+        .order_by("rna_type")
+        .values_list("rna_type", flat=True)
+        .distinct()
+        if normalized_signature_part(value).lower() not in RNA_TYPE_EXCLUDE_FROM_FILTER
+    ]
+
     if q:
         experiments = experiments.filter(
             Q(experiment_id__icontains=q)
@@ -208,7 +225,13 @@ def browse(request):
             | Q(peptide__peptide_id__icontains=q)
             | Q(peptide__peptide_name__icontains=q)
             | Q(peptide__peptide_sequence_raw__icontains=q)
+            | Q(rna_type__icontains=q)
             | Q(rna_payload_or_target__icontains=q)
+            | Q(target_gene_or_transcript__icontains=q)
+            | Q(rna_sequence__icontains=q)
+            | Q(sense_strand__icontains=q)
+            | Q(antisense_strand__icontains=q)
+            | Q(rna_modifications__icontains=q)
             | Q(output_value__icontains=q)
         )
 
@@ -306,6 +329,7 @@ def browse(request):
             "page_obj": page_obj,
             "q": q,
             "rna_type": rna_type,
+            "rna_type_options": rna_type_options,
             "in_vivo_flag": in_vivo_flag,
             "uptake_confirmed": uptake_confirmed,
             "in_vitro_functional_effect": in_vitro_functional_effect,
@@ -407,6 +431,11 @@ def downloads_page(request):
             "filename": "PepRNA-DB_peptides.xlsx",
         },
         {
+            "label": "RNA and nucleic-acid systems table",
+            "kind": "rna",
+            "filename": "PepRNA-DB_RNA_nucleic_acid_systems.xlsx",
+        },
+        {
             "label": "Papers table",
             "kind": "papers",
             "filename": "PepRNA-DB_papers.xlsx",
@@ -497,6 +526,37 @@ def normalize_export_yes_no_blank(dataframe):
     return dataframe
 
 
+def rna_system_rows():
+    rows_by_signature = {}
+    experiments = Experiment.objects.select_related("paper", "peptide").order_by("experiment_id")
+    for experiment in experiments:
+        signature = rna_signature(experiment)
+        if not any(signature):
+            continue
+
+        key = signature
+        row = rows_by_signature.setdefault(
+            key,
+            {
+                "rna_type": experiment.rna_type,
+                "rna_payload_or_target": experiment.rna_payload_or_target,
+                "target_gene_or_transcript": experiment.target_gene_or_transcript,
+                "rna_sequence": experiment.rna_sequence,
+                "sense_strand": experiment.sense_strand,
+                "antisense_strand": experiment.antisense_strand,
+                "rna_modifications": experiment.rna_modifications,
+                "has_sequence_information": "yes"
+                if has_rna_sequence_information(experiment)
+                else "no",
+                "experiment_count": 0,
+                "example_experiment_id": experiment.experiment_id,
+            },
+        )
+        row["experiment_count"] += 1
+
+    return list(rows_by_signature.values())
+
+
 def download_dataset(request, kind):
     if kind == "full":
         dataframe = pd.DataFrame(full_dataset_rows())
@@ -562,6 +622,9 @@ def download_dataset(request, kind):
         )
         dataframe["peptide_name"] = dataframe["peptide_name"].map(canonical_peptide_name)
         filename = "PepRNA-DB_peptides.xlsx"
+    elif kind == "rna":
+        dataframe = pd.DataFrame(rna_system_rows())
+        filename = "PepRNA-DB_RNA_nucleic_acid_systems.xlsx"
     elif kind == "papers":
         dataframe = pd.DataFrame(
             list(

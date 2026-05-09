@@ -10,10 +10,16 @@
             <div class="label-block">
                 <label for="q">Search</label>
                 <input id="q" type="text" name="q" value="{{ q }}" size="40">
+                <p class="field-help">Examples: <code>survivin siRNA</code>, <code>R9</code>, <code>TAT</code>, <code>CCUGGUUCCUGGAACAAUUU</code></p>
             </div>
             <div class="label-block">
                 <label for="rna_type">RNA type</label>
-                <input id="rna_type" type="text" name="rna_type" value="{{ rna_type }}">
+                <select id="rna_type" name="rna_type">
+                    <option value="" {% if not rna_type %}selected{% endif %}>Any</option>
+                    {% for option in rna_type_options %}
+                        <option value="{{ option }}" {% if rna_type == option %}selected{% endif %}>{{ option }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="label-block">
                 <label for="uptake_confirmed">Uptake confirmed</label>
