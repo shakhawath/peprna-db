@@ -1,6 +1,8 @@
 import json
+from functools import lru_cache
 from io import BytesIO
 from pathlib import Path
+import re
 
 from django.core.paginator import Paginator
 from django.http import FileResponse, Http404
@@ -9,6 +11,9 @@ from django.shortcuts import get_object_or_404, render
 import pandas as pd
 
 from .models import Experiment, Paper, Peptide
+
+
+DATASET_PATH = Path(__file__).resolve().parent.parent / "apr_25.xlsx"
 
 
 def yes_no_blank(value, blank_as_no=False):
@@ -34,6 +39,25 @@ def normalized_signature_part(value):
     if value is None:
         return ""
     return " ".join(str(value).strip().split())
+
+
+def normalized_workbook_text(value):
+    if pd.isna(value):
+        return ""
+    return re.sub(r"\s+", " ", str(value).strip())
+
+
+@lru_cache(maxsize=1)
+def peptide_name_count_from_workbook():
+    if not DATASET_PATH.exists():
+        return 0
+    dataframe = pd.read_excel(DATASET_PATH, sheet_name=0, usecols=["peptide_name"])
+    peptide_names = {
+        normalized_workbook_text(value)
+        for value in dataframe["peptide_name"]
+        if normalized_workbook_text(value)
+    }
+    return len(peptide_names)
 
 
 def normalized_sequence_part(value):
@@ -220,6 +244,7 @@ def home(request):
         "rna_system_count": len(nucleic_acid_sequences),
         "peptide_rna_system_count": len(peptide_cargo_sequence_combinations),
         "cargo_class_count": cargo_class_count,
+        "peptide_name_count": peptide_name_count_from_workbook(),
     }
     return render(request, "core/home.html", {"stats": stats})
 
