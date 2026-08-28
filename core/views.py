@@ -36,6 +36,10 @@ def normalized_signature_part(value):
     return " ".join(str(value).strip().split())
 
 
+def normalized_sequence_part(value):
+    return normalized_signature_part(value).upper()
+
+
 SEQUENCE_PLACEHOLDERS = {
     "",
     "not reported",
@@ -77,6 +81,14 @@ def peptide_signature(experiment):
     )
 
 
+def peptide_backbone_sequence_signature(experiment):
+    return normalized_sequence_part(experiment.peptide.peptide_backbone_clean)
+
+
+def has_peptide_backbone_sequence(experiment):
+    return has_real_sequence_text(experiment.peptide.peptide_backbone_clean)
+
+
 def has_peptide_sequence_information(experiment):
     peptide = experiment.peptide
     return any(
@@ -98,6 +110,20 @@ def rna_signature(experiment):
         normalized_signature_part(experiment.sense_strand),
         normalized_signature_part(experiment.antisense_strand),
         normalized_signature_part(experiment.rna_modifications),
+    )
+
+
+def nucleic_acid_strand_signature(experiment):
+    return (
+        normalized_sequence_part(experiment.sense_strand),
+        normalized_sequence_part(experiment.antisense_strand),
+    )
+
+
+def has_nucleic_acid_strand_information(experiment):
+    return (
+        has_real_sequence_text(experiment.sense_strand)
+        or has_real_sequence_text(experiment.antisense_strand)
     )
 
 
@@ -155,27 +181,26 @@ def home(request):
     experiments = list(
         Experiment.objects.select_related("peptide").all()
     )
-    sequence_informed_peptide_experiments = [
-        experiment for experiment in experiments if has_peptide_sequence_information(experiment)
-    ]
-    peptide_systems = {
-        peptide_signature(experiment) for experiment in sequence_informed_peptide_experiments
-    }
-    sequence_informed_experiments = [
-        experiment for experiment in experiments if has_rna_sequence_information(experiment)
-    ]
-    rna_systems = {
-        signature
-        for experiment in sequence_informed_experiments
-        for signature in [rna_signature(experiment)]
-        if any(signature)
-    }
-    peptide_rna_systems = {
-        (peptide_signature(experiment), rna_signature(experiment))
+    peptide_backbone_sequences = {
+        peptide_backbone_sequence_signature(experiment)
         for experiment in experiments
-        if has_peptide_sequence_information(experiment)
-        and has_rna_sequence_information(experiment)
-        if any(rna_signature(experiment))
+        if has_peptide_backbone_sequence(experiment)
+    }
+    strand_informed_experiments = [
+        experiment for experiment in experiments if has_nucleic_acid_strand_information(experiment)
+    ]
+    nucleic_acid_sequences = {
+        nucleic_acid_strand_signature(experiment)
+        for experiment in strand_informed_experiments
+    }
+    peptide_cargo_sequence_combinations = {
+        (
+            peptide_backbone_sequence_signature(experiment),
+            nucleic_acid_strand_signature(experiment),
+        )
+        for experiment in experiments
+        if has_peptide_backbone_sequence(experiment)
+        and has_nucleic_acid_strand_information(experiment)
     }
     cargo_class_count = len(
         {
@@ -188,12 +213,12 @@ def home(request):
     )
     stats = {
         "experiment_count": len(experiments),
-        "peptide_count": len(peptide_systems),
+        "peptide_count": len(peptide_backbone_sequences),
         "paper_count": Paper.objects.count(),
         "in_vivo_count": sum(1 for experiment in experiments if experiment.in_vivo_flag is True),
-        "sequence_peptide_system_count": len(peptide_systems),
-        "rna_system_count": len(rna_systems),
-        "peptide_rna_system_count": len(peptide_rna_systems),
+        "sequence_peptide_system_count": len(peptide_backbone_sequences),
+        "rna_system_count": len(nucleic_acid_sequences),
+        "peptide_rna_system_count": len(peptide_cargo_sequence_combinations),
         "cargo_class_count": cargo_class_count,
     }
     return render(request, "core/home.html", {"stats": stats})
