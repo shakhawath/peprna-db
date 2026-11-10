@@ -54,6 +54,7 @@
                 <option value="" {% if not in_vivo_flag %}selected{% endif %}>Any</option>
                 <option value="yes" {% if in_vivo_flag == "yes" %}selected{% endif %}>Yes</option>
                 <option value="no" {% if in_vivo_flag == "no" %}selected{% endif %}>No</option>
+                <option value="blank" {% if in_vivo_flag == "blank" %}selected{% endif %}>Blank (undetermined)</option>
                 </select>
             </div>
             <div class="label-block">

@@ -164,7 +164,7 @@ def has_rna_sequence_information(experiment):
 
 DISPLAY_AS_YES_NO = {
     "delivery_success_class": False,
-    "in_vivo_flag": True,
+    "in_vivo_flag": False,
     "uptake_confirmed": False,
     "in_vitro_functional_effect": False,
     "endosomal_escape_evidence": False,
@@ -328,7 +328,9 @@ def filtered_experiments_from_request(request):
     if in_vivo_flag == "yes":
         experiments = experiments.filter(in_vivo_flag=True)
     elif in_vivo_flag == "no":
-        experiments = experiments.filter(Q(in_vivo_flag=False) | Q(in_vivo_flag__isnull=True))
+        experiments = experiments.filter(in_vivo_flag=False)
+    elif in_vivo_flag == "blank":
+        experiments = experiments.filter(in_vivo_flag__isnull=True)
 
     if delivery_success_class == "yes":
         experiments = experiments.filter(
@@ -396,7 +398,7 @@ def browse(request):
                 "experiment": experiment,
                 "peptide_name": canonical_peptide_name(experiment.peptide.peptide_name),
                 "delivery_success_class": yes_no_blank(experiment.delivery_success_class),
-                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag, blank_as_no=True),
+                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag),
                 "uptake_confirmed": yes_no_blank(experiment.uptake_confirmed),
                 "in_vitro_functional_effect": yes_no_blank(
                     experiment.in_vitro_functional_effect
@@ -553,7 +555,7 @@ def full_dataset_rows(experiments=None):
                 "peptide_modifications": experiment.peptide.peptide_modifications,
                 "noncanonical_residues": experiment.peptide.noncanonical_residues,
                 "delivery_success_class": yes_no_blank(experiment.delivery_success_class),
-                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag, blank_as_no=True),
+                "in_vivo_flag": yes_no_blank(experiment.in_vivo_flag),
                 "uptake_confirmed": yes_no_blank(experiment.uptake_confirmed),
                 "label_confidence": experiment.label_confidence,
                 "in_vitro_functional_effect": yes_no_blank(
@@ -611,7 +613,7 @@ def export_dataframe_response(dataframe, filename):
 def normalize_export_yes_no_blank(dataframe):
     conversions = {
         "delivery_success_class": yes_no_blank,
-        "in_vivo_flag": lambda value: yes_no_blank(value, blank_as_no=True),
+        "in_vivo_flag": yes_no_blank,
         "uptake_confirmed": yes_no_blank,
         "in_vitro_functional_effect": yes_no_blank,
         "endosomal_escape_evidence": yes_no_blank,
