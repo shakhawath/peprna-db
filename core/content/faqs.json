@@ -1,11 +1,19 @@
 [
   {
     "question": "What does one experiment record represent?",
-    "answer": "One experiment record represents one curated experimental entry linked to a paper and a peptide."
+    "answer": "One experiment record represents one curated peptide-cargo, peptide-formulation, or peptide-model entry linked to a source paper and a peptide."
+  },
+  {
+    "question": "Does PepRNA-DB include pDNA records?",
+    "answer": "Yes. PepRNA-DB focuses on peptide-mediated RNA delivery, but it also retains related pDNA records when plasmid DNA was reported in the curated peptide-delivery literature, including studies where pDNA was tested alongside RNA cargos or in pDNA-only peptide delivery papers."
+  },
+  {
+    "question": "How was PepRNA-DB curated?",
+    "answer": "Relevant publications were processed with an LLM-assisted extraction workflow followed by manual review, correction, and standardization of peptide, cargo, formulation, model, and outcome information."
   },
   {
     "question": "Why are some fields blank?",
-    "answer": "Blank values indicate that the information was not reported in the source article, has not yet been curated, or could not be normalized confidently."
+    "answer": "For the four outcome fields (uptake confirmed, in vitro functional effect, endosomal escape evidence, and delivery success class), blank means undetermined or not tested. For other fields, blank usually means the information was not reported in the source article, was unclear, or could not be confidently extracted."
   },
   {
     "question": "What is the difference between Paper ID, Peptide ID, and Experiment ID?",
@@ -14,5 +22,9 @@
   {
     "question": "How are noncanonical residues shown?",
     "answer": "Named residue annotations such as ORN are stored directly in the noncanonical residues field when available."
+  },
+  {
+    "question": "How should users cite or reuse the data?",
+    "answer": "Users should cite PepRNA-DB when using the database and should also cite the original source publications when discussing individual records. Downloadable tables are provided to support reproducible reuse and secondary analysis."
   }
 ]

@@ -294,6 +294,9 @@ class Command(BaseCommand):
 
                 in_vivo_flag = as_bool(in_vivo_source)
                 uptake_confirmed = as_bool(uptake_source)
+                delivery_success_class = as_string(row_value(row, "delivery_success_class"))
+                if in_vivo_flag is not True:
+                    delivery_success_class = None
                 size_nm = as_decimal(size_source)
                 zeta_mv = as_decimal(zeta_source)
 
@@ -328,7 +331,7 @@ class Command(BaseCommand):
                 experiment_defaults = {
                     "paper": paper,
                     "peptide": peptide,
-                    "delivery_success_class": as_string(row_value(row, "delivery_success_class")),
+                    "delivery_success_class": delivery_success_class,
                     "in_vivo_flag": in_vivo_flag,
                     "uptake_confirmed": uptake_confirmed,
                     "label_confidence": as_string(row_value(row, "label_confidence")),

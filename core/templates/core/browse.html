@@ -27,6 +27,7 @@
                 <option value="" {% if not uptake_confirmed %}selected{% endif %}>Any</option>
                 <option value="yes" {% if uptake_confirmed == "yes" %}selected{% endif %}>Yes</option>
                 <option value="no" {% if uptake_confirmed == "no" %}selected{% endif %}>No</option>
+                <option value="blank" {% if uptake_confirmed == "blank" %}selected{% endif %}>Blank (undetermined)</option>
                 </select>
             </div>
             <div class="label-block">
@@ -35,7 +36,7 @@
                 <option value="" {% if not in_vitro_functional_effect %}selected{% endif %}>Any</option>
                 <option value="yes" {% if in_vitro_functional_effect == "yes" %}selected{% endif %}>Yes</option>
                 <option value="no" {% if in_vitro_functional_effect == "no" %}selected{% endif %}>No</option>
-                <option value="blank" {% if in_vitro_functional_effect == "blank" %}selected{% endif %}>Blank</option>
+                <option value="blank" {% if in_vitro_functional_effect == "blank" %}selected{% endif %}>Blank (undetermined)</option>
                 </select>
             </div>
             <div class="label-block">
@@ -44,7 +45,7 @@
                 <option value="" {% if not endosomal_escape_evidence %}selected{% endif %}>Any</option>
                 <option value="yes" {% if endosomal_escape_evidence == "yes" %}selected{% endif %}>Yes</option>
                 <option value="no" {% if endosomal_escape_evidence == "no" %}selected{% endif %}>No</option>
-                <option value="blank" {% if endosomal_escape_evidence == "blank" %}selected{% endif %}>Blank</option>
+                <option value="blank" {% if endosomal_escape_evidence == "blank" %}selected{% endif %}>Blank (undetermined)</option>
                 </select>
             </div>
             <div class="label-block">
@@ -61,7 +62,7 @@
                 <option value="" {% if not delivery_success_class %}selected{% endif %}>Any</option>
                 <option value="yes" {% if delivery_success_class == "yes" %}selected{% endif %}>Yes</option>
                 <option value="no" {% if delivery_success_class == "no" %}selected{% endif %}>No</option>
-                <option value="blank" {% if delivery_success_class == "blank" %}selected{% endif %}>Blank</option>
+                <option value="blank" {% if delivery_success_class == "blank" %}selected{% endif %}>Blank (undetermined)</option>
                 </select>
             </div>
             <div class="label-block">

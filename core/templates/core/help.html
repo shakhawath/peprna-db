@@ -5,13 +5,13 @@
 {% block content %}
     <h1>Help</h1>
 
-    <p>This database collects curated experiments on peptide-mediated RNA delivery from the literature.</p>
+    <p>This database collects curated experiments on peptide-mediated delivery of RNA and related nucleic-acid cargoes from the literature.</p>
 
     <div class="toc">
         <a href="#experiment-records">Experiment records</a> |
         <a href="#key-experiment-labels">Key experiment labels</a> |
         <a href="#peptide-information">Peptide information</a> |
-        <a href="#rna-information">RNA information</a> |
+        <a href="#rna-information">Nucleic-acid cargo information</a> |
         <a href="#missing-values">Missing values</a> |
         <a href="#conservative-labeling-policy">Conservative labeling policy</a> |
         <a href="#searching-and-filtering">Searching and filtering</a> |
@@ -24,33 +24,36 @@
     <p>Each row in the experiment table corresponds to one peptide, peptide formulation, or peptide-model combination.</p>
     <p>If a peptide was tested both in vitro and in vivo, the in vitro and in vivo experiments are recorded as separate rows. This separation avoids mixing mechanistic in vitro activity with in vivo delivery outcomes.</p>
     <p>If a peptide only exists as part of a larger formulation, the peptide-system combination is treated as the experimental unit.</p>
+    <p>The primary scope is peptide-mediated RNA delivery. Related pDNA records are retained when plasmid DNA was reported in the curated peptide-delivery literature, including papers where pDNA was tested alongside RNA cargos and papers focused on pDNA-only peptide delivery.</p>
 
     <h2 id="key-experiment-labels">Key experiment labels</h2>
+    <p>For the four outcome fields below: <strong>Yes</strong> = demonstrated positive, <strong>No</strong> = demonstrated negative, and <strong>Blank</strong> = undetermined or not tested.</p>
 
     <h3>Delivery success class</h3>
-    <p><strong>Values shown on the website and in downloads:</strong> yes, no, or blank</p>
-    <p>This is the primary binary label for in vivo delivery success.</p>
-    <p><strong>Yes</strong> means functional RNA delivery was demonstrated in vivo.</p>
-    <p><strong>No</strong> means no demonstrated in vivo functional RNA delivery.</p>
-    <p><strong>Blank</strong> means no delivery success class was assigned.</p>
-    <p>A value of <strong>yes</strong> is assigned only when the study reports functional RNA delivery in vivo, such as in vivo gene knockdown, splice correction, reporter expression, tumor growth suppression, phenotypic rescue, or survival benefit.</p>
-    <p>A value of <strong>no</strong> includes in vitro-only studies, uptake-only studies, screened systems that were not advanced to successful in vivo testing, and systems that were tested but failed.</p>
+    <p><strong>Values shown on the website:</strong> yes, no, or blank</p>
+    <p>This label describes in vivo delivery success.</p>
+    <p><strong>Yes</strong> means functional RNA or related nucleic-acid delivery was demonstrated in vivo.</p>
+    <p><strong>No</strong> means the system was tested in vivo, but no functional nucleic-acid delivery effect was demonstrated.</p>
+    <p><strong>Blank</strong> means in vivo delivery success was undetermined or not tested.</p>
+    <p>A value of <strong>yes</strong> is assigned only when the study reports functional nucleic-acid delivery in vivo, such as in vivo gene knockdown, splice correction, reporter expression, tumor growth suppression, phenotypic rescue, or survival benefit.</p>
+    <p>Use <code>in_vivo_flag</code> to identify records that were not tested in vivo; an in vitro-only or uptake-only result is not an in vivo negative result.</p>
     <p>Important: in vitro functional activity alone does not qualify as delivery success class = <strong>yes</strong>.</p>
 
     <h3>Uptake confirmed</h3>
-    <p><strong>Values shown on the website:</strong> yes or no</p>
+    <p><strong>Values shown on the website:</strong> yes, no or blank</p>
     <p>This field describes whether cellular uptake or internalization was explicitly demonstrated.</p>
     <p><strong>Yes</strong> means uptake or internalization was explicitly shown.</p>
-    <p><strong>No</strong> means uptake was not discussed, not tested, or not clearly demonstrated.</p>
-    <p>Evidence may include fluorescence microscopy, confocal microscopy, flow cytometry, or similar assays showing cellular internalization of the RNA, peptide, or peptide-RNA complex.</p>
+    <p><strong>No</strong> means uptake was tested and the result was negative.</p>
+    <p><strong>Blank</strong> means uptake was undetermined or not tested.</p>
+    <p>Evidence may include fluorescence microscopy, confocal microscopy, flow cytometry, or similar assays showing cellular internalization of the nucleic-acid cargo, peptide, or peptide-cargo complex.</p>
 
     <h3>In vitro functional effect</h3>
     <p><strong>Values shown on the website and in downloads:</strong> yes, no, or blank</p>
-    <p>This field indicates whether the RNA cargo produced a functional biological effect in vitro.</p>
-    <p><strong>Yes</strong> means functional RNA activity was demonstrated in vitro.</p>
-    <p><strong>No</strong> means uptake was shown, but no functional RNA effect was demonstrated, or the in vitro result was negative.</p>
+    <p>This field indicates whether the nucleic-acid cargo produced a functional biological effect in vitro.</p>
+    <p><strong>Yes</strong> means functional RNA or related nucleic-acid activity was demonstrated in vitro.</p>
+    <p><strong>No</strong> means uptake was shown, but no functional nucleic-acid effect was demonstrated, or the in vitro result was negative.</p>
     <p><strong>Blank</strong> means no data were available, the field was not applicable, or the experiment was not tested in vitro.</p>
-    <p>Examples of functional in vitro effects include gene knockdown, reporter protein expression, splice correction, gene silencing, or other RNA-mediated biological activity.</p>
+    <p>Examples of functional in vitro effects include gene knockdown, reporter protein expression, splice correction, gene silencing, or other nucleic-acid-mediated biological activity.</p>
 
     <h3>Endosomal escape evidence</h3>
     <p><strong>Values shown on the website and in downloads:</strong> yes, no, or blank</p>
@@ -69,10 +72,10 @@
 
     <h3>In vivo flag</h3>
     <p><strong>Values shown on the website:</strong> yes or no</p>
-    <p>This field indicates whether an in vivo experiment was performed for the peptide-RNA system.</p>
-    <p><strong>Yes</strong> means the peptide-RNA system was tested in vivo.</p>
+    <p>This field indicates whether an in vivo experiment was performed for the peptide-cargo system.</p>
+    <p><strong>Yes</strong> means the peptide-cargo system was tested in vivo.</p>
     <p><strong>No</strong> means no in vivo experiment was reported.</p>
-    <p>The in vivo flag is separate from delivery success class. A system may be marked <strong>yes</strong> for in vivo testing but still have <code>delivery_success_class = 0</code> if in vivo testing was performed without demonstrated functional RNA delivery.</p>
+    <p>The in vivo flag is separate from delivery success class. A system may be marked <strong>yes</strong> for in vivo testing but still have <code>delivery_success_class = 0</code> if in vivo testing was performed without demonstrated functional nucleic-acid delivery.</p>
 
     <h2 id="peptide-information">Peptide information</h2>
     <p>PepRNA-DB contains curated peptide information extracted from the source literature.</p>
@@ -81,19 +84,18 @@
     <p>The peptide section may include peptide name or identifier, raw sequence as reported in the article, cleaned peptide sequence, tokenized sequence, noncanonical residues and residue names, peptide modifications, backbone modifications, terminal modifications, conjugations or chemical linkers, description of peptide role in the delivery system, and formulation or complexation information.</p>
     <p>When available, peptide modifications are preserved in descriptive fields rather than being forced into the cleaned amino acid sequence. This allows the database to retain both computationally usable sequence representations and human-readable modification details.</p>
 
-    <h2 id="rna-information">RNA information</h2>
-    <p>PepRNA-DB contains curated RNA and nucleic-acid cargo information extracted from the source literature and linked to individual peptide-mediated delivery experiments.</p>
-    <p>The RNA curation workflow was designed to capture both human-readable cargo descriptions and machine-readable sequence information where available. The RNA section may include RNA type, named RNA cargo or payload, target gene or transcript, reported RNA sequence, sense strand, antisense strand, sequence format, RNA chemistry or modification information, and annotation confidence.</p>
-    <p>RNA type describes the class of nucleic-acid cargo used in the experiment, such as siRNA, mRNA, ASO, SCO, miRNA, shRNA, sgRNA, or pDNA. Although PepRNA-DB focuses on RNA delivery, some nucleic-acid cargoes such as plasmid DNA are retained when they were delivered using peptide-based systems in the curated literature.</p>
-    <p>The payload or target field describes the RNA cargo in a human-readable form, for example EGFP-targeting siRNA, pLuc705 splice-correcting oligonucleotide, luciferase mRNA, Cas9 mRNA, or VEGF siRNA. When available, the target gene or transcript is recorded separately to support searching and comparison across experiments.</p>
-    <p>Sequence information is recorded when the source article reports the RNA sequence clearly. For duplex or paired cargos, sense and antisense strands may be shown separately. When both strands are available, the combined RNA sequence field may include labelled strand information. For long cargos such as mRNA or plasmid constructs, the database may describe the cargo or construct rather than provide a full sequence if the complete sequence was not reported in the article.</p>
-    <p>RNA chemistry and modification information is curated from reported backbone chemistry, terminal modifications, conjugations, labels, and other chemical modifications. Examples include 2'-O-methyl modification, phosphorothioate backbone, LNA, morpholino chemistry, fluorescent labels, cholesterol conjugation, or other reported RNA modifications. These annotations are preserved in descriptive fields because chemical details are often reported inconsistently across publications.</p>
+    <h2 id="rna-information">Nucleic-acid cargo information</h2>
+    <p>PepRNA-DB contains curated RNA and related nucleic-acid cargo information extracted from the source literature and linked to individual peptide-mediated delivery experiments.</p>
+    <p>The cargo curation workflow was designed to capture both human-readable cargo descriptions and machine-readable sequence information where available. This section may include RNA type, named cargo or payload, target gene or transcript, reported sequence, sense strand, antisense strand, sequence format, chemistry or modification information, and annotation confidence.</p>
+    <p>RNA type describes the class of nucleic-acid cargo used in the experiment, such as siRNA, mRNA, ASO, SCO, miRNA, shRNA, sgRNA, or pDNA. Although PepRNA-DB focuses on RNA delivery, plasmid DNA records are retained when they were delivered using peptide-based systems in the curated literature.</p>
+    <p>The payload or target field describes the cargo in a human-readable form, for example EGFP-targeting siRNA, pLuc705 splice-correcting oligonucleotide, luciferase mRNA, Cas9 mRNA, VEGF siRNA, or a plasmid reporter construct. When available, the target gene or transcript is recorded separately to support searching and comparison across experiments.</p>
+    <p>Sequence information is recorded when the source article reports the cargo sequence clearly. For duplex or paired cargos, sense and antisense strands may be shown separately. When both strands are available, the combined sequence field may include labelled strand information. For long cargos such as mRNA or plasmid constructs, the database may describe the cargo or construct rather than provide a full sequence if the complete sequence was not reported in the article.</p>
+    <p>Cargo chemistry and modification information is curated from reported backbone chemistry, terminal modifications, conjugations, labels, and other chemical modifications. Examples include 2'-O-methyl modification, phosphorothioate backbone, LNA, morpholino chemistry, fluorescent labels, cholesterol conjugation, or other reported cargo modifications. These annotations are preserved in descriptive fields because chemical details are often reported inconsistently across publications.</p>
     <p>Fields marked as “not reported” usually mean that the information was not reported, was unclear, or could not be confidently extracted from the source article.</p>
 
     <h2 id="missing-values">Missing values</h2>
-    <p>Missing values are represented as blank cells.</p>
-    <p>A blank value does not necessarily mean that the property is absent. It usually means that the information was not reported, was unclear, was not tested, or could not be confidently extracted from the article.</p>
-    <p>For evidence labels, blank cells are used when the corresponding experiment or mechanism was not tested, not applicable, not clearly discussed, or not supported by explicit evidence.</p>
+    <p>For the four outcome fields (uptake confirmed, in vitro functional effect, endosomal escape evidence, and delivery success class), a blank cell is an assessed <strong>undetermined or not tested</strong> state, not an unpopulated field.</p>
+    <p>For other fields, blank usually means the information was not reported, was unclear, or could not be confidently extracted from the article. It does not necessarily mean the property is absent.</p>
 
     <h2 id="conservative-labeling-policy">Conservative labeling policy</h2>
     <p>PepRNA-DB uses conservative evidence-based labeling.</p>
@@ -102,14 +104,14 @@
     <p>The database is designed to support two-stage analysis: in vitro activity, represented by <code>in_vitro_functional_effect</code>, and in vivo translation, represented by <code>delivery_success_class</code>.</p>
 
     <h2 id="searching-and-filtering">Searching and filtering</h2>
-    <p>The Browse page allows users to search and filter experiment records by peptide, RNA type, delivery class, year, publication, in vivo testing, uptake, functional effect, and endosomal escape evidence.</p>
-    <p>Example uses include searching a peptide name to find all associated experiments, filtering by RNA type to compare siRNA, mRNA, ASO, or other RNA cargos, filtering in vivo = <strong>yes</strong> to view systems tested in animals, filtering success class = <strong>yes</strong> to identify systems with demonstrated in vivo functional delivery, and comparing uptake confirmed = <strong>yes</strong> with in vitro functional effect = <strong>yes</strong> to distinguish uptake from functional intracellular delivery.</p>
+    <p>The Browse page allows users to search and filter experiment records by peptide, RNA type or related cargo type, delivery class, year, publication, in vivo testing, uptake, functional effect, and endosomal escape evidence.</p>
+    <p>Example uses include searching a peptide name to find all associated experiments, filtering by RNA type to compare siRNA, mRNA, ASO, pDNA, or other cargo classes, filtering in vivo = <strong>yes</strong> to view systems tested in animals, filtering success class = <strong>yes</strong> to identify systems with demonstrated in vivo functional delivery, and comparing uptake confirmed = <strong>yes</strong> with in vitro functional effect = <strong>yes</strong> to distinguish uptake from functional intracellular delivery.</p>
 
     <h2 id="downloads">Downloads</h2>
     <p>The Downloads page provides access to structured database tables for reuse and analysis.</p>
     <p>Available files may include the full dataset, experiment table, peptide table, and publication table.</p>
-    <p>Downloaded files can be used for statistical analysis, visualization, sequence analysis, and formulation comparison. Users should check the column descriptions and missing-value definitions before analysis.</p>
-    <p>In the downloadable Excel files, the fields <code>delivery_success_class</code>, <code>in_vivo_flag</code>, and <code>uptake_confirmed</code> are exported as <strong>yes</strong> or <strong>no</strong>. The fields <code>in_vitro_functional_effect</code> and <code>endosomal_escape_evidence</code> are exported as <strong>yes</strong>, <strong>no</strong>, or blank.</p>
+    <p>Downloaded files can be used for statistical analysis, visualization, sequence analysis, cargo-class comparison, and formulation comparison. Users should check the column descriptions and missing-value definitions before analysis.</p>
+    <p>The website and its downloadable Excel exports show the four outcome fields as <strong>yes</strong>, <strong>no</strong>, or blank. The versioned figshare dataset uses <strong>1</strong>, <strong>0</strong>, or blank for the same states. In both conventions, positive and negative results require demonstrated evidence; blank means undetermined or not tested. The separate <code>in_vivo_flag</code> indicates whether in vivo testing was performed.</p>
 
     <h2 id="citation-and-reuse">Citation and reuse</h2>
     <p>PepRNA-DB is intended as a freely accessible research resource. Users should cite the database when using the data in publications, presentations, or derivative analyses.</p>
